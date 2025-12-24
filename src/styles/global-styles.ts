@@ -11,7 +11,6 @@ export const globalStyles = StyleSheet.create({
     width: "100%",
     padding: SPACING.lg,
     alignItems: "center",
-    backgroundColor: "black",
   },
   title: {
     fontSize: 42,

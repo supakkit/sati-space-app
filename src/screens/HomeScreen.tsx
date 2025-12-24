@@ -8,8 +8,77 @@ import {
 import { COLORS, SPACING } from "../constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { globalStyles } from "../styles/global-styles";
+import { useState } from "react";
+import TimerScreen from "./TimerScreen";
+
+const DURATION_OPTIONS = [
+  { label: "5m", value: 5 * 60 },
+  { label: "10m", value: 10 * 60 },
+  { label: "20m", value: 20 * 60 },
+  { label: "30m", value: 30 * 60 },
+  { label: "45m", value: 45 * 60 },
+  { label: "1h", value: 60 * 60 },
+  { label: "1h15m", value: 75 * 60 },
+  { label: "1h30m", value: 90 * 60 },
+  { label: "2h", value: 120 * 60 },
+];
 
 export default function HomeScreen() {
+  const [showTimer, setShowTimer] = useState(false);
+
+  // Config Timer State
+  const [totalDuration, setTotalDuration] = useState(20 * 60);
+  const [warmupDuration, setWarmupDuration] = useState(5 * 60);
+  const [cooldownDuration, setCooldownDuration] = useState(60);
+
+  const handleSetDuration = (seconds: number) => {
+    setTotalDuration(seconds);
+    if (seconds <= warmupDuration + cooldownDuration) {
+      setWarmupDuration(60);
+      setCooldownDuration(60);
+    }
+  };
+
+  const handleSetWarmupDuration = () => {
+    let nextDuration = 0;
+    if (warmupDuration === 0) nextDuration = 60;
+    else if (warmupDuration === 60) nextDuration = 3 * 60;
+    else if (warmupDuration === 3 * 60) nextDuration = 5 * 60;
+    else if (warmupDuration === 5 * 60) nextDuration = 10 * 60;
+    else if (warmupDuration === 10 * 60) nextDuration = 15 * 60;
+    else if (warmupDuration === 15 * 60) nextDuration = 30 * 60;
+    else nextDuration = 0;
+
+    if (nextDuration < totalDuration - cooldownDuration)
+      setWarmupDuration(nextDuration);
+    else setWarmupDuration(0);
+  };
+
+  const handleSetCooldownDuration = () => {
+    let nextDuration = 0;
+    if (cooldownDuration === 0) nextDuration = 60;
+    else if (cooldownDuration === 60) nextDuration = 2 * 60;
+    else if (cooldownDuration === 2 * 60) nextDuration = 3 * 60;
+    else if (cooldownDuration === 3 * 60) nextDuration = 5 * 60;
+    else nextDuration = 0;
+    if (nextDuration < totalDuration - warmupDuration)
+      setCooldownDuration(nextDuration);
+    else setCooldownDuration(0);
+  };
+
+  if (showTimer) {
+    return (
+      <TimerScreen
+        initialConfig={{
+          totalDuration,
+          warmupDuration,
+          cooldownDuration,
+        }}
+        onExit={() => setShowTimer(false)}
+      />
+    );
+  }
+
   return (
     <View style={globalStyles.container}>
       <ScrollView contentContainerStyle={globalStyles.content}>
@@ -84,17 +153,26 @@ export default function HomeScreen() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={globalStyles.scrollChipContainer}
           >
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={[globalStyles.chip, true && globalStyles.chipActive]}
-            >
-              <Text style={[globalStyles.chipText, true && globalStyles.chipTextActive]}>
-                5m
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8} style={[globalStyles.chip]}>
-              <Text style={globalStyles.chipText}>30m</Text>
-            </TouchableOpacity>
+            {DURATION_OPTIONS.map((option) => (
+              <TouchableOpacity
+                key={option.label}
+                activeOpacity={0.8}
+                style={[
+                  globalStyles.chip,
+                  totalDuration === option.value && globalStyles.chipActive,
+                ]}
+                onPress={() => handleSetDuration(option.value)}
+              >
+                <Text
+                  style={[
+                    globalStyles.chipText,
+                    true && globalStyles.chipTextActive,
+                  ]}
+                >
+                  {option.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </ScrollView>
         </View>
 
@@ -138,9 +216,14 @@ export default function HomeScreen() {
           <Text style={globalStyles.sectionTitle}>Music Flow Config</Text>
           <View style={globalStyles.row}>
             {/* Start / Warmup Config */}
-            <TouchableOpacity style={styles.infoBox}>
+            <TouchableOpacity
+              style={styles.infoBox}
+              onPress={handleSetWarmupDuration}
+            >
               <Text style={styles.infoLabel}>Start (tap)</Text>
-              <Text style={styles.infoValue}>5m</Text>
+              <Text style={styles.infoValue}>
+                {Math.floor(warmupDuration / 60)}m
+              </Text>
             </TouchableOpacity>
 
             <View style={styles.lineSpacer} />
@@ -154,15 +237,23 @@ export default function HomeScreen() {
             <View style={styles.lineSpacer} />
 
             {/* End / Cooldown Config */}
-            <TouchableOpacity style={styles.infoBox}>
+            <TouchableOpacity
+              style={styles.infoBox}
+              onPress={handleSetCooldownDuration}
+            >
               <Text style={styles.infoLabel}>End (tap)</Text>
-              <Text style={styles.infoValue}>1m</Text>
+              <Text style={styles.infoValue}>
+                {Math.floor(cooldownDuration / 60)}m
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
 
         <View style={globalStyles.section}>
-          <TouchableOpacity style={styles.startButton}>
+          <TouchableOpacity
+            style={styles.startButton}
+            onPress={() => setShowTimer(true)}
+          >
             <Text style={styles.startButtonText}>Begin Session</Text>
           </TouchableOpacity>
         </View>
