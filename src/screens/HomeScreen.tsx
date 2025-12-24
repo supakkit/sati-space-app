@@ -7,13 +7,14 @@ import {
 } from "react-native";
 import { COLORS, SPACING } from "../constants/theme";
 import { Ionicons } from "@expo/vector-icons";
+import { globalStyles } from "../styles/global-styles";
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Sati Space</Text>
-        <Text style={styles.subtitle}>Find your inner peace</Text>
+    <View style={globalStyles.container}>
+      <ScrollView contentContainerStyle={globalStyles.content}>
+        <Text style={globalStyles.title}>Sati Space</Text>
+        <Text style={globalStyles.subtitle}>Find your inner peace</Text>
 
         {/* Stats Section */}
         <TouchableOpacity activeOpacity={0.8}>
@@ -30,9 +31,9 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         {/* Presets Selector */}
-        <View style={styles.section}>
+        <View style={globalStyles.section}>
           <View style={styles.presetHeader}>
-            <Text style={[styles.sectionTitle, styles.presetTitle]}>
+            <Text style={[globalStyles.sectionTitle, styles.presetTitle]}>
               Presets
             </Text>
             <TouchableOpacity activeOpacity={0.8}>
@@ -49,64 +50,64 @@ export default function HomeScreen() {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.scrollChipContainer}
+            contentContainerStyle={globalStyles.scrollChipContainer}
           >
             <TouchableOpacity
               activeOpacity={0.8}
-              style={[styles.chip, styles.presetItem]}
+              style={[globalStyles.chip, styles.presetItem]}
             >
-              <Text style={styles.chipText}>Morning vibe</Text>
-              <View style={styles.chipActiveBadge} />
+              <Text style={globalStyles.chipText}>Morning vibe</Text>
+              <View style={globalStyles.chipActiveBadge} />
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.8}
-              style={[styles.chip, styles.presetItem]}
+              style={[globalStyles.chip, styles.presetItem]}
             >
-              <Text style={styles.chipText}>Morning vibe</Text>
-              <View style={styles.chipActiveBadge} />
+              <Text style={globalStyles.chipText}>Morning vibe</Text>
+              <View style={globalStyles.chipActiveBadge} />
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.8}
-              style={[styles.chip, styles.presetItem]}
+              style={[globalStyles.chip, styles.presetItem]}
             >
-              <Text style={styles.chipText}>Morning vibe</Text>
-              <View style={styles.chipActiveBadge} />
+              <Text style={globalStyles.chipText}>Morning vibe</Text>
+              <View style={globalStyles.chipActiveBadge} />
             </TouchableOpacity>
           </ScrollView>
         </View>
 
         {/* Duration Selector */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Duration</Text>
+        <View style={globalStyles.section}>
+          <Text style={globalStyles.sectionTitle}>Duration</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.scrollChipContainer}
+            contentContainerStyle={globalStyles.scrollChipContainer}
           >
             <TouchableOpacity
               activeOpacity={0.8}
-              style={[styles.chip, true && styles.chipActive]}
+              style={[globalStyles.chip, true && globalStyles.chipActive]}
             >
-              <Text style={[styles.chipText, true && styles.chipTextActive]}>
+              <Text style={[globalStyles.chipText, true && globalStyles.chipTextActive]}>
                 5m
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8} style={[styles.chip]}>
-              <Text style={styles.chipText}>30m</Text>
+            <TouchableOpacity activeOpacity={0.8} style={[globalStyles.chip]}>
+              <Text style={globalStyles.chipText}>30m</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>
 
         {/* Sound Selector */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Ambient Sound</Text>
-          <TouchableOpacity style={styles.selectBox} activeOpacity={0.8}>
+        <View style={globalStyles.section}>
+          <Text style={globalStyles.sectionTitle}>Ambient Sound</Text>
+          <TouchableOpacity style={globalStyles.selectBox} activeOpacity={0.8}>
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 12 }}
             >
               <View
                 style={[
-                  styles.iconCircle,
+                  globalStyles.iconCircle,
                   {
                     backgroundColor: true ? COLORS.primary : "transparent",
                     borderWidth: true ? 0 : 1,
@@ -120,7 +121,7 @@ export default function HomeScreen() {
                   color={true ? COLORS.background : COLORS.textSecondary}
                 />
               </View>
-              <Text numberOfLines={1} style={styles.selectBoxText}>
+              <Text numberOfLines={1} style={globalStyles.selectBoxText}>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum.
               </Text>
               <Ionicons
@@ -133,9 +134,9 @@ export default function HomeScreen() {
         </View>
 
         {/* Music Timing Config */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Music Flow Config</Text>
-          <View style={styles.row}>
+        <View style={globalStyles.section}>
+          <Text style={globalStyles.sectionTitle}>Music Flow Config</Text>
+          <View style={globalStyles.row}>
             {/* Start / Warmup Config */}
             <TouchableOpacity style={styles.infoBox}>
               <Text style={styles.infoLabel}>Start (tap)</Text>
@@ -160,7 +161,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <View style={styles.section}>
+        <View style={globalStyles.section}>
           <TouchableOpacity style={styles.startButton}>
             <Text style={styles.startButtonText}>Begin Session</Text>
           </TouchableOpacity>
@@ -171,30 +172,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  content: {
-    width: "100%",
-    padding: SPACING.lg,
-    alignItems: "center",
-    backgroundColor: "black",
-  },
-  title: {
-    fontSize: 42,
-    fontWeight: 300,
-    color: COLORS.text,
-    marginBottom: SPACING.sm,
-    letterSpacing: 2,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: COLORS.textSecondary,
-    marginBottom: SPACING.lg * 2,
-    letterSpacing: 2,
-  },
   statsRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -218,52 +195,6 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
     letterSpacing: 1,
     marginTop: 4,
-  },
-  section: {
-    width: "100%",
-    marginBottom: SPACING.xl,
-    // paddingHorizontal: SPACING.md,
-  },
-  sectionTitle: {
-    color: COLORS.textSecondary,
-    fontSize: 14,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    marginBottom: SPACING.md,
-    textAlign: "center",
-  },
-  scrollChipContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: SPACING.md,
-    paddingHorizontal: SPACING.sm,
-  },
-  chip: {
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.lg,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: COLORS.surface,
-    backgroundColor: "transparent",
-    marginBottom: SPACING.sm,
-  },
-  chipActive: {
-    backgroundColor: COLORS.surface,
-    borderColor: COLORS.primary,
-  },
-  chipText: {
-    color: COLORS.textSecondary,
-    fontSize: 16,
-  },
-  chipTextActive: {
-    color: COLORS.text,
-    fontWeight: 600,
-  },
-  chipActiveBadge: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: COLORS.primary,
   },
 
   presetHeader: {
@@ -294,34 +225,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-  },
-
-  selectBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: COLORS.surface,
-    padding: SPACING.md,
-    borderRadius: 16,
-  },
-  selectBoxText: {
-    color: COLORS.text,
-    fontSize: 16,
-    fontWeight: 500,
-    width: 200,
-  },
-  iconCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: SPACING.md,
   },
 
   infoBox: {
