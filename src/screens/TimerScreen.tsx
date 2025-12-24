@@ -8,10 +8,10 @@ import {
 import { COLORS, SPACING } from "../constants/theme";
 import { globalStyles } from "../styles/global-styles";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
+import { MeditationConfig, TimerPhase } from "../types/timer";
+import { useMeditationTimer } from "../hooks/useMeditationTimer";
 
-type Phase = "idle" | "warmup" | "deep" | "cooldown" | "completed";
-
-const getPhaseLabel = (phase: Phase) => {
+const getPhaseLabel = (phase: TimerPhase) => {
   switch (phase) {
     case "idle":
       return "Ready to Begin";
@@ -26,7 +26,7 @@ const getPhaseLabel = (phase: Phase) => {
   }
 };
 
-const getPhaseColor = (phase: Phase) => {
+const getPhaseColor = (phase: TimerPhase) => {
   switch (phase) {
     case "warmup":
       return COLORS.secondary;
@@ -41,15 +41,38 @@ const getPhaseColor = (phase: Phase) => {
 
 const { width } = Dimensions.get("window");
 
-export default function TimerScreen() {
-  let phase: Phase;
-  phase = "warmup";
-  const isRunning = true;
-  const progress = 60;
+const DEFAULT_CONFIG: MeditationConfig = {
+  totalDuration: 5 * 60, // 5 mins total
+  warmupDuration: 60, // 1 min warmup
+  cooldownDuration: 60, // 1 min cooldown
+};
+
+type PropsType = {
+  initialConfig?: MeditationConfig;
+  onExit: () => void;
+};
+
+export default function TimerScreen({
+  initialConfig = DEFAULT_CONFIG,
+  onExit,
+}: PropsType) {
+  const {
+    remainingTime,
+    phase,
+    isRunning,
+    startTimer,
+    pauseTimer,
+    resetTimer,
+    formatTime,
+    progress,
+  } = useMeditationTimer(initialConfig);
+
+  const handleSaveSession = (totalDuration: number) => {};
+
   return (
     <View style={globalStyles.container}>
       {/* Exit */}
-      <TouchableOpacity style={globalStyles.closeButton}>
+      <TouchableOpacity onPress={onExit} style={globalStyles.closeButton}>
         <Text style={globalStyles.closeText}>✕</Text>
       </TouchableOpacity>
 
@@ -58,10 +81,9 @@ export default function TimerScreen() {
         rotation={0}
         size={width * 0.7}
         width={4}
-        fill={progress} // dynamic value (0-100)
+        fill={progress * 100} // dynamic value (0-100)
         tintColor={COLORS.primary}
         backgroundColor={COLORS.surface}
-        onAnimationComplete={() => console.log("onAnimationComplete")}
         style={styles.timerCircle}
       >
         {() => (
@@ -69,7 +91,7 @@ export default function TimerScreen() {
             <Text style={[styles.phaseText, { color: getPhaseColor(phase) }]}>
               {getPhaseLabel(phase)}
             </Text>
-            <Text style={styles.timeText}>10:30</Text>
+            <Text style={styles.timeText}>{formatTime(remainingTime)}</Text>
           </>
         )}
       </AnimatedCircularProgress>
@@ -77,7 +99,7 @@ export default function TimerScreen() {
       {/* Control */}
       <View style={styles.controls}>
         {!isRunning && phase !== "completed" && (
-          <TouchableOpacity style={styles.mainButton}>
+          <TouchableOpacity style={styles.mainButton} onPress={startTimer}>
             <Text style={styles.mainButtonText}>
               {true ? "Start" : "Resume"}
             </Text>
@@ -85,19 +107,22 @@ export default function TimerScreen() {
         )}
 
         {isRunning && (
-          <TouchableOpacity style={styles.secondaryButton}>
+          <TouchableOpacity style={styles.secondaryButton} onPress={pauseTimer}>
             <Text style={styles.secondaryButtonText}>Pause</Text>
           </TouchableOpacity>
         )}
 
         {phase === "completed" && (
-          <TouchableOpacity style={styles.mainButton}>
+          <TouchableOpacity
+            style={styles.mainButton}
+            onPress={() => handleSaveSession(initialConfig.totalDuration)}
+          >
             <Text style={styles.mainButtonText}>Save Session</Text>
           </TouchableOpacity>
         )}
 
         {phase !== "idle" && phase !== "completed" && (
-          <TouchableOpacity style={styles.resetButton}>
+          <TouchableOpacity style={styles.resetButton} onPress={resetTimer}>
             <Text style={styles.resetButtonText}>Stop</Text>
           </TouchableOpacity>
         )}
