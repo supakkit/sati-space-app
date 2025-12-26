@@ -8,10 +8,10 @@ import {
 import { COLORS, SPACING } from "../constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { globalStyles } from "../styles/global-styles";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import TimerScreen from "./TimerScreen";
 import SoundPickerModal from "../components/SoundPickerModal";
-import { CUSTOM_SOUND, SOUND_LIBRARY } from "../constants/sound";
+import { SOUND_LIBRARY, SoundOption } from "../constants/sound";
 
 const DURATION_OPTIONS = [
   { label: "2m", value: 2 * 60 },
@@ -35,11 +35,9 @@ export default function HomeScreen() {
   const [warmupDuration, setWarmupDuration] = useState(5 * 60);
   const [cooldownDuration, setCooldownDuration] = useState(60);
 
-  const [selectedSoundId, setSelectedSoundId] = useState(SOUND_LIBRARY[0].id);
-  const [customSoundSource, setCustomSoundSource] = useState<string | null>(
-    null
+  const [selectedSound, setSelectedSound] = useState<SoundOption>(
+    SOUND_LIBRARY[0]
   );
-  const [customSoundName, setCustomSoundName] = useState<string | null>(null);
 
   const handleSetDuration = (seconds: number) => {
     setTotalDuration(seconds);
@@ -76,14 +74,6 @@ export default function HomeScreen() {
     else setCooldownDuration(0);
   };
 
-  const [selectedSoundName, selectedSoundSource] = useMemo(() => {
-    if (selectedSoundId === CUSTOM_SOUND) {
-      return [customSoundName || "Custom Audio", customSoundSource];
-    }
-    const sound = SOUND_LIBRARY.find((s) => s.id === selectedSoundId);
-    return sound ? [sound.name, sound.asset] : ["Select Sound", null];
-  }, [selectedSoundId]);
-
   if (showTimer) {
     return (
       <TimerScreen
@@ -92,7 +82,7 @@ export default function HomeScreen() {
           warmupDuration,
           cooldownDuration,
         }}
-        soundSource={selectedSoundSource}
+        soundSource={selectedSound.asset}
         onExit={() => setShowTimer(false)}
       />
     );
@@ -103,10 +93,8 @@ export default function HomeScreen() {
       <SoundPickerModal
         visible={showSoundPicker}
         onClose={() => setShowSoundPicker(false)}
-        selectedSoundId={selectedSoundId}
-        onSelect={(soundId: string) => setSelectedSoundId(soundId)}
-        customSoundSource={customSoundSource}
-        customSoundName={customSoundName}
+        selectedSound={selectedSound}
+        onSelectSound={(sound: SoundOption) => setSelectedSound(sound)}
       />
 
       <ScrollView contentContainerStyle={globalStyles.content}>
@@ -232,7 +220,7 @@ export default function HomeScreen() {
                 />
               </View>
               <Text numberOfLines={1} style={globalStyles.selectBoxText}>
-                {selectedSoundName}
+                {selectedSound.name}
               </Text>
               <Ionicons
                 name="chevron-down"

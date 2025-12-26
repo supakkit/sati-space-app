@@ -10,48 +10,73 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, SPACING } from "../constants/theme";
 import { globalStyles } from "../styles/global-styles";
-import { CUSTOM_SOUND, SOUND_LIBRARY } from "../constants/sound";
-import { AudioSource, useAudioPlayer } from "expo-audio";
-
-const PREVIEW_DURATION = 10; // seconds
+import { CUSTOM_SOUND, SOUND_LIBRARY, SoundOption } from "../constants/sound";
+import { useAudioPlayer } from "expo-audio";
+import * as DocumentPicker from "expo-document-picker";
 
 type PropsType = {
   visible: boolean;
   onClose: () => void;
-  selectedSoundId: string;
-  onSelect: (id: string) => void;
-  // onPickCustom: () => void;
-  customSoundName?: string | null;
-  customSoundSource?: AudioSource;
+  selectedSound: SoundOption;
+  onSelectSound: (sound: SoundOption) => void;
 };
 
 export default function SoundPickerModal({
   visible,
   onClose,
-  selectedSoundId,
-  onSelect,
-  // onPickCustom,
-  customSoundName,
-  customSoundSource,
+  selectedSound,
+  onSelectSound,
 }: PropsType) {
-  const [currentSoundId, setCurrentSoundId] = useState<string>(
-    selectedSoundId || SOUND_LIBRARY[0].id
-  );
-  const [currentSound, setCurrentSound] = useState<AudioSource | null>(null);
+  const [currentSound, setCurrentSound] = useState<SoundOption>(selectedSound);
 
-  const player = useAudioPlayer(currentSound);
+  const player = useAudioPlayer(currentSound.asset);
 
+  // Effect: Handle Playing
   useEffect(() => {
-    if (!currentSound) return;
-    player.play();
-  }, [currentSound]);
+    if (visible && currentSound.asset) {
+      player.play();
+    }
+  }, [currentSound.asset, visible, player]);
 
-  const playPreview = (soundId: string, source: AudioSource) => {
-    setCurrentSound(source);
-  };
+  // Effect: Handle Global Cleanup
+  useEffect(() => {
+    return () => {
+      try {
+        if (player) {
+          player.pause();
+        }
+      } catch {}
+    };
+  }, [visible, player]);
 
   const stopPreview = () => {
-    player.pause();
+    if (!player) return;
+
+    try {
+      player.pause();
+      player.seekTo(0);
+    } catch {}
+  };
+
+  // Helper: Pick Local Audio
+  const pickCustomAudio = async () => {
+    try {
+      const res = await DocumentPicker.getDocumentAsync({
+        type: "audio/*",
+        copyToCacheDirectory: true,
+      });
+
+      if (res.assets && res.assets.length > 0) {
+        const file = res.assets[0];
+        setCurrentSound({
+          id: CUSTOM_SOUND,
+          name: file.name,
+          asset: file.uri,
+        });
+      }
+    } catch (err) {
+      console.error("Document Picker Error", err);
+    }
   };
 
   return (
@@ -65,26 +90,28 @@ export default function SoundPickerModal({
                 key={sound.id}
                 style={[
                   styles.item,
-                  currentSoundId === sound.id && styles.itemActive,
+                  currentSound.id === sound.id && styles.itemActive,
                 ]}
               >
                 <TouchableOpacity
                   style={styles.itemMain}
                   onPress={() => {
-                    playPreview(sound.id, sound.asset);
-                    setCurrentSoundId(sound.id);
+                    setCurrentSound({
+                      id: sound.id,
+                      name: sound.name,
+                      asset: sound.asset,
+                    });
                   }}
                 >
-                  {/* {console.log("sound:", sound)} */}
                   <Ionicons
                     name={
-                      currentSoundId === sound.id
+                      currentSound.id === sound.id
                         ? "radio-button-on"
                         : "radio-button-off"
                     }
                     size={20}
                     color={
-                      currentSoundId === sound.id
+                      currentSound.id === sound.id
                         ? COLORS.primary
                         : COLORS.textSecondary
                     }
@@ -93,7 +120,7 @@ export default function SoundPickerModal({
                     numberOfLines={1}
                     style={[
                       styles.itemText,
-                      currentSoundId === sound.id && styles.itemTextActive,
+                      currentSound.id === sound.id && styles.itemTextActive,
                     ]}
                   >
                     {sound.name}
@@ -107,24 +134,25 @@ export default function SoundPickerModal({
             <View
               style={[
                 styles.item,
-                currentSoundId === CUSTOM_SOUND && styles.itemActive,
+                currentSound.id === CUSTOM_SOUND && styles.itemActive,
               ]}
             >
               <TouchableOpacity
                 style={styles.itemMain}
                 onPress={() => {
                   stopPreview();
+                  pickCustomAudio();
                 }}
               >
                 <Ionicons
                   name={
-                    currentSoundId === CUSTOM_SOUND
+                    currentSound.id === CUSTOM_SOUND
                       ? "radio-button-on"
                       : "radio-button-off"
                   }
                   size={20}
                   color={
-                    currentSoundId === CUSTOM_SOUND
+                    currentSound.id === CUSTOM_SOUND
                       ? COLORS.primary
                       : COLORS.textSecondary
                   }
@@ -134,14 +162,14 @@ export default function SoundPickerModal({
                     numberOfLines={1}
                     style={[
                       styles.itemText,
-                      currentSoundId === CUSTOM_SOUND && styles.itemTextActive,
+                      currentSound.id === CUSTOM_SOUND && styles.itemTextActive,
                     ]}
                   >
                     Custom Audio File
                   </Text>
-                  {customSoundName && (
+                  {currentSound.id === CUSTOM_SOUND && (
                     <Text numberOfLines={1} style={styles.subText}>
-                      {customSoundName}
+                      {currentSound.name}
                     </Text>
                   )}
                 </View>
@@ -168,8 +196,8 @@ export default function SoundPickerModal({
             <TouchableOpacity
               style={globalStyles.buttonSave}
               onPress={() => {
-                onSelect(currentSoundId);
                 stopPreview();
+                onSelectSound(currentSound);
                 onClose();
               }}
             >

@@ -1,4 +1,4 @@
-type SoundOption = {
+export type SoundOption = {
   id: string;
   name: string;
   asset: string | null;
