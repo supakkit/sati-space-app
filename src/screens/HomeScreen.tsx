@@ -8,10 +8,13 @@ import {
 import { COLORS, SPACING } from "../constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { globalStyles } from "../styles/global-styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TimerScreen from "./TimerScreen";
 import SoundPickerModal from "../components/SoundPickerModal";
-import { SOUND_LIBRARY, SoundOption } from "../constants/sound";
+import { CUSTOM_SOUND, SOUND_LIBRARY, SoundOption } from "../constants/sound";
+import SavePresetModal from "../components/SavePresetModal";
+import { deletePreset, getPresets, Preset, savePreset } from "../utils/storage";
+import { AudioSource } from "expo-audio";
 
 const DURATION_OPTIONS = [
   { label: "2m", value: 2 * 60 },
@@ -29,15 +32,76 @@ const DURATION_OPTIONS = [
 export default function HomeScreen() {
   const [showTimer, setShowTimer] = useState(false);
   const [showSoundPicker, setShowSoundPicker] = useState(false);
+  const [showSavePreset, setShowSavePreset] = useState(false);
 
   // Config Timer State
   const [totalDuration, setTotalDuration] = useState(20 * 60);
   const [warmupDuration, setWarmupDuration] = useState(5 * 60);
   const [cooldownDuration, setCooldownDuration] = useState(60);
 
-  const [selectedSound, setSelectedSound] = useState<SoundOption>(
-    SOUND_LIBRARY[0]
-  );
+  const [selectedSound, setSelectedSound] = useState<SoundOption>({
+    ...SOUND_LIBRARY[0],
+  });
+
+  const [presets, setPresets] = useState<Preset[]>([]);
+
+  useEffect(() => {
+    loadPresets();
+  }, []);
+
+  const loadPresets = async () => {
+    const presets = await getPresets();
+    setPresets(presets);
+  };
+
+  const handleSavePreset = async (name: string) => {
+    await savePreset({
+      name,
+      totalDuration,
+      warmupDuration,
+      cooldownDuration,
+      soundId: selectedSound.id,
+      customSoundUri:
+        selectedSound.id === CUSTOM_SOUND
+          ? selectedSound.asset ?? undefined
+          : undefined,
+      customSoundName:
+        selectedSound.id === CUSTOM_SOUND ? selectedSound.name : undefined,
+    });
+    loadPresets();
+  };
+
+  const handleLoadPreset = (preset: Preset) => {
+    const sound: SoundOption = { ...SOUND_LIBRARY[0] };
+
+    if (preset.soundId === CUSTOM_SOUND) {
+      sound.id = preset.soundId;
+      sound.name = preset.customSoundName || CUSTOM_SOUND;
+      sound.asset = preset.customSoundUri || null;
+    } else {
+      const { id, name, asset } = getSound(preset.soundId);
+      if (id && name && asset) {
+        sound.id = id;
+        sound.name = name;
+        sound.asset = asset;
+      }
+    }
+
+    setTotalDuration(preset.totalDuration);
+    setWarmupDuration(preset.warmupDuration);
+    setCooldownDuration(preset.cooldownDuration);
+    setSelectedSound(sound);
+  };
+
+  const getSound = (soundId: string) => {
+    const sound = SOUND_LIBRARY.find((s) => s.id === soundId);
+    return { ...sound };
+  };
+
+  const handleDeletePreset = async (id: string) => {
+    await deletePreset(id);
+    loadPresets();
+  };
 
   const handleSetDuration = (seconds: number) => {
     setTotalDuration(seconds);
@@ -94,7 +158,13 @@ export default function HomeScreen() {
         visible={showSoundPicker}
         onClose={() => setShowSoundPicker(false)}
         selectedSound={selectedSound}
-        onSelectSound={(sound: SoundOption) => setSelectedSound(sound)}
+        onSelectSound={setSelectedSound}
+      />
+
+      <SavePresetModal
+        visible={showSavePreset}
+        onSave={handleSavePreset}
+        onClose={() => setShowSavePreset(false)}
       />
 
       <ScrollView contentContainerStyle={globalStyles.content}>
@@ -121,12 +191,15 @@ export default function HomeScreen() {
             <Text style={[globalStyles.sectionTitle, styles.presetTitle]}>
               Presets
             </Text>
-            <TouchableOpacity activeOpacity={0.8}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => setShowSavePreset(true)}
+            >
               <Text style={styles.presetAddButton}>+ Save Current</Text>
             </TouchableOpacity>
           </View>
 
-          {false && (
+          {presets.length === 0 && (
             <View style={styles.presetNoItemContainer}>
               <Text style={styles.presetNoItemText}>No presets saved</Text>
             </View>
@@ -137,27 +210,18 @@ export default function HomeScreen() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={globalStyles.scrollChipContainer}
           >
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={[globalStyles.chip, styles.presetItem]}
-            >
-              <Text style={globalStyles.chipText}>Morning vibe</Text>
-              <View style={globalStyles.chipActiveBadge} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={[globalStyles.chip, styles.presetItem]}
-            >
-              <Text style={globalStyles.chipText}>Morning vibe</Text>
-              <View style={globalStyles.chipActiveBadge} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={[globalStyles.chip, styles.presetItem]}
-            >
-              <Text style={globalStyles.chipText}>Morning vibe</Text>
-              <View style={globalStyles.chipActiveBadge} />
-            </TouchableOpacity>
+            {presets.map((preset) => (
+              <TouchableOpacity
+                key={preset.id}
+                activeOpacity={0.8}
+                style={[globalStyles.chip, styles.presetItem]}
+                onPress={() => handleLoadPreset(preset)}
+                onLongPress={() => handleDeletePreset(preset.id)}
+              >
+                <Text style={globalStyles.chipText}>{preset.name}</Text>
+                <View style={globalStyles.chipActiveBadge} />
+              </TouchableOpacity>
+            ))}
           </ScrollView>
         </View>
 

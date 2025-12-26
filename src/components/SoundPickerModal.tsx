@@ -81,7 +81,7 @@ export default function SoundPickerModal({
 
   return (
     <Modal visible={visible} transparent animationType="fade">
-      <View style={styles.overlay}>
+      <View style={globalStyles.overlay}>
         <View style={styles.dropdownContainer}>
           <Text style={styles.headerTitle}>Select Ambient Sound</Text>
           <ScrollView style={styles.list}>
@@ -211,18 +211,11 @@ export default function SoundPickerModal({
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: SPACING.lg,
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
-  },
   dropdownContainer: {
     width: "100%",
     maxHeight: "60%",
     backgroundColor: COLORS.surface,
-    borderRadius: 16,
+    borderRadius: 20,
     paddingVertical: SPACING.md,
   },
   headerTitle: {

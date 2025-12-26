@@ -137,4 +137,12 @@ export const globalStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 600,
   },
+
+  overlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: SPACING.lg,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
 });
