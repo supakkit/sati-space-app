@@ -12,6 +12,8 @@ import { MeditationConfig, TimerPhase } from "../types/timer";
 import { useMeditationTimer } from "../hooks/useMeditationTimer";
 import { AudioSource } from "expo-audio";
 import { useMeditationAudio } from "../hooks/useMeditationAudio";
+import { Ionicons } from "@expo/vector-icons";
+import { saveSession } from "../utils/storage";
 
 const getPhaseLabel = (phase: TimerPhase) => {
   switch (phase) {
@@ -51,12 +53,14 @@ const DEFAULT_CONFIG: MeditationConfig = {
 
 type PropsType = {
   initialConfig?: MeditationConfig;
+  soundName: string;
   soundSource: AudioSource;
   onExit: () => void;
 };
 
 export default function TimerScreen({
   initialConfig = DEFAULT_CONFIG,
+  soundName,
   soundSource,
   onExit,
 }: PropsType) {
@@ -78,13 +82,11 @@ export default function TimerScreen({
     soundSource,
   });
 
-  const handleSaveSession = (totalDuration: number) => {};
-
   return (
     <View style={globalStyles.container}>
       {/* Exit */}
       <TouchableOpacity onPress={onExit} style={globalStyles.closeButton}>
-        <Text style={globalStyles.closeText}>✕</Text>
+        <Ionicons name="close" size={24} color={COLORS.text} />
       </TouchableOpacity>
 
       {/* Main Timer Display */}
@@ -132,7 +134,13 @@ export default function TimerScreen({
         {phase === "completed" && (
           <TouchableOpacity
             style={styles.mainButton}
-            onPress={() => handleSaveSession(initialConfig.totalDuration)}
+            onPress={() => {
+              saveSession({
+                duration: initialConfig.totalDuration,
+                soundName,
+              });
+              onExit();
+            }}
           >
             <Text style={styles.mainButtonText}>Save Session</Text>
           </TouchableOpacity>

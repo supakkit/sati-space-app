@@ -14,6 +14,7 @@ import SoundPickerModal from "../components/SoundPickerModal";
 import { CUSTOM_SOUND, SOUND_LIBRARY, SoundOption } from "../constants/sound";
 import SavePresetModal from "../components/SavePresetModal";
 import { deletePreset, getPresets, Preset, savePreset } from "../utils/storage";
+import HistoryScreen from "./HistoryScreen";
 
 const DURATION_OPTIONS = [
   { label: "2m", value: 2 * 60 },
@@ -32,6 +33,7 @@ export default function HomeScreen() {
   const [showTimer, setShowTimer] = useState(false);
   const [showSoundPicker, setShowSoundPicker] = useState(false);
   const [showSavePreset, setShowSavePreset] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
   // Config Timer State
   const [totalDuration, setTotalDuration] = useState(20 * 60);
@@ -145,10 +147,15 @@ export default function HomeScreen() {
           warmupDuration,
           cooldownDuration,
         }}
+        soundName={selectedSound.name}
         soundSource={selectedSound.asset}
         onExit={() => setShowTimer(false)}
       />
     );
+  }
+
+  if (showHistory) {
+    return <HistoryScreen onClose={() => setShowHistory(false)} />;
   }
 
   return (
@@ -171,7 +178,10 @@ export default function HomeScreen() {
         <Text style={styles.subtitle}>Find your inner peace</Text>
 
         {/* Stats Section */}
-        <TouchableOpacity activeOpacity={0.8}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setShowHistory(true)}
+        >
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
               <Text style={styles.statValue}>1</Text>
@@ -185,9 +195,9 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         {/* Presets Selector */}
-        <View style={styles.section}>
+        <View style={globalStyles.section}>
           <View style={styles.presetHeader}>
-            <Text style={[styles.sectionTitle, styles.presetTitle]}>
+            <Text style={[globalStyles.sectionTitle, styles.presetTitle]}>
               Presets
             </Text>
             <TouchableOpacity
@@ -225,8 +235,8 @@ export default function HomeScreen() {
         </View>
 
         {/* Duration Selector */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Duration</Text>
+        <View style={globalStyles.section}>
+          <Text style={globalStyles.sectionTitle}>Duration</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -256,8 +266,8 @@ export default function HomeScreen() {
         </View>
 
         {/* Sound Selector */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Ambient Sound</Text>
+        <View style={globalStyles.section}>
+          <Text style={globalStyles.sectionTitle}>Ambient Sound</Text>
           <TouchableOpacity
             style={globalStyles.selectBox}
             activeOpacity={0.8}
@@ -295,9 +305,9 @@ export default function HomeScreen() {
         </View>
 
         {/* Music Timing Config */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Music Flow Config</Text>
-          <View style={styles.row}>
+        <View style={globalStyles.section}>
+          <Text style={globalStyles.sectionTitle}>Music Flow Config</Text>
+          <View style={globalStyles.row}>
             {/* Start / Warmup Config */}
             <TouchableOpacity
               style={styles.infoBox}
@@ -337,7 +347,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <View style={styles.section}>
+        <View style={globalStyles.section}>
           <TouchableOpacity
             style={styles.startButton}
             onPress={() => setShowTimer(true)}
@@ -368,25 +378,6 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
     marginBottom: SPACING.lg * 2,
     letterSpacing: 2,
-  },
-  section: {
-    width: "100%",
-    marginBottom: SPACING.xl,
-    // paddingHorizontal: SPACING.md,
-  },
-  sectionTitle: {
-    color: COLORS.textSecondary,
-    fontSize: 14,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    marginBottom: SPACING.md,
-    textAlign: "center",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: SPACING.md,
   },
 
   statsRow: {

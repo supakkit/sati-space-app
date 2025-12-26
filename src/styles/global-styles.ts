@@ -7,6 +7,26 @@ export const globalStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+    section: {
+    width: "100%",
+    marginBottom: SPACING.xl,
+    // paddingHorizontal: SPACING.md,
+  },
+  sectionTitle: {
+    color: COLORS.textSecondary,
+    fontSize: 14,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    marginBottom: SPACING.md,
+    textAlign: "center",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: SPACING.md,
+  },
+  
   scrollChipContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -68,10 +88,6 @@ export const globalStyles = StyleSheet.create({
     top: 60,
     right: 30,
     padding: 10,
-  },
-  closeText: {
-    color: COLORS.textSecondary,
-    fontSize: 24,
   },
 
   actions: {

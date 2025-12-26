@@ -4,7 +4,7 @@ export interface MeditationSession {
   id: string;
   timestamp: number;
   duration: number; // in seconds
-  soundId: string;
+  soundName: string;
 }
 
 const STORAGE_KEY = "@sati_space_sessions";
