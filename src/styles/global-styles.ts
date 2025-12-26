@@ -7,37 +7,6 @@ export const globalStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  content: {
-    width: "100%",
-    padding: SPACING.lg,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 42,
-    fontWeight: 300,
-    color: COLORS.text,
-    marginBottom: SPACING.sm,
-    letterSpacing: 2,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: COLORS.textSecondary,
-    marginBottom: SPACING.lg * 2,
-    letterSpacing: 2,
-  },
-  section: {
-    width: "100%",
-    marginBottom: SPACING.xl,
-    // paddingHorizontal: SPACING.md,
-  },
-  sectionTitle: {
-    color: COLORS.textSecondary,
-    fontSize: 14,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    marginBottom: SPACING.md,
-    textAlign: "center",
-  },
   scrollChipContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -93,15 +62,9 @@ export const globalStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  row: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: SPACING.md,
-  },
 
   closeButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 60,
     right: 30,
     padding: 10,
@@ -112,10 +75,9 @@ export const globalStyles = StyleSheet.create({
   },
 
   actions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
     gap: SPACING.md,
-    paddingHorizontal: SPACING.md,
     marginTop: SPACING.md,
   },
   buttonCancel: {
@@ -144,5 +106,20 @@ export const globalStyles = StyleSheet.create({
     alignItems: "center",
     padding: SPACING.lg,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+  modalHeaderTitle: {
+    color: COLORS.textSecondary,
+    fontSize: 18,
+    textAlign: "center",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    paddingHorizontal: SPACING.lg,
+    marginBottom: SPACING.sm,
+  },
+  modalSubtitle: {
+    color: COLORS.textSecondary,
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: SPACING.lg,
   },
 });

@@ -34,8 +34,8 @@ export default function SavePresetModal({
     <Modal visible={visible} transparent animationType="fade">
       <View style={globalStyles.overlay}>
         <View style={styles.container}>
-          <Text style={styles.title}>Save Preset</Text>
-          <Text style={styles.subtitle}>
+          <Text style={globalStyles.modalHeaderTitle}>Save Preset</Text>
+          <Text style={globalStyles.modalSubtitle}>
             Give your session configuration a name
           </Text>
 
@@ -48,7 +48,7 @@ export default function SavePresetModal({
             autoFocus
           />
 
-          <View style={styles.actions}>
+          <View style={globalStyles.actions}>
             <TouchableOpacity
               style={globalStyles.buttonCancel}
               onPress={onClose}
@@ -72,19 +72,8 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     backgroundColor: COLORS.surface,
-    padding: SPACING.lg,
+    padding: SPACING.md,
     borderRadius: 20,
-  },
-  title: {
-    color: COLORS.text,
-    fontSize: 20,
-    fontWeight: "600",
-    marginBottom: SPACING.sm,
-  },
-  subtitle: {
-    color: COLORS.textSecondary,
-    fontSize: 14,
-    marginBottom: SPACING.lg,
   },
   input: {
     backgroundColor: COLORS.background,
@@ -92,11 +81,6 @@ const styles = StyleSheet.create({
     padding: SPACING.md,
     borderRadius: 12,
     fontSize: 16,
-    marginBottom: SPACING.xl,
-  },
-  actions: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    gap: SPACING.md,
+    marginBottom: SPACING.sm,
   },
 });

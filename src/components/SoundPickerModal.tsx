@@ -83,7 +83,9 @@ export default function SoundPickerModal({
     <Modal visible={visible} transparent animationType="fade">
       <View style={globalStyles.overlay}>
         <View style={styles.dropdownContainer}>
-          <Text style={styles.headerTitle}>Select Ambient Sound</Text>
+          <Text style={globalStyles.modalHeaderTitle}>
+            Select Ambient Sound
+          </Text>
           <ScrollView style={styles.list}>
             {SOUND_LIBRARY.map((sound) => (
               <View
@@ -183,7 +185,9 @@ export default function SoundPickerModal({
               </TouchableOpacity>
             </View>
           </ScrollView>
-          <View style={globalStyles.actions}>
+          <View
+            style={[globalStyles.actions, { paddingHorizontal: SPACING.md }]}
+          >
             <TouchableOpacity
               style={globalStyles.buttonCancel}
               onPress={() => {
@@ -218,17 +222,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: SPACING.md,
   },
-  headerTitle: {
-    color: COLORS.textSecondary,
-    fontSize: 18,
-    textAlign: "center",
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    paddingHorizontal: SPACING.lg,
-    marginBottom: SPACING.md,
-  },
   list: {
     width: "100%",
+    marginTop: SPACING.sm,
   },
   item: {
     flexDirection: "row",

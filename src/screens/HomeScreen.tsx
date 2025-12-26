@@ -14,7 +14,6 @@ import SoundPickerModal from "../components/SoundPickerModal";
 import { CUSTOM_SOUND, SOUND_LIBRARY, SoundOption } from "../constants/sound";
 import SavePresetModal from "../components/SavePresetModal";
 import { deletePreset, getPresets, Preset, savePreset } from "../utils/storage";
-import { AudioSource } from "expo-audio";
 
 const DURATION_OPTIONS = [
   { label: "2m", value: 2 * 60 },
@@ -167,9 +166,9 @@ export default function HomeScreen() {
         onClose={() => setShowSavePreset(false)}
       />
 
-      <ScrollView contentContainerStyle={globalStyles.content}>
-        <Text style={globalStyles.title}>Sati Space</Text>
-        <Text style={globalStyles.subtitle}>Find your inner peace</Text>
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.title}>Sati Space</Text>
+        <Text style={styles.subtitle}>Find your inner peace</Text>
 
         {/* Stats Section */}
         <TouchableOpacity activeOpacity={0.8}>
@@ -186,9 +185,9 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         {/* Presets Selector */}
-        <View style={globalStyles.section}>
+        <View style={styles.section}>
           <View style={styles.presetHeader}>
-            <Text style={[globalStyles.sectionTitle, styles.presetTitle]}>
+            <Text style={[styles.sectionTitle, styles.presetTitle]}>
               Presets
             </Text>
             <TouchableOpacity
@@ -226,8 +225,8 @@ export default function HomeScreen() {
         </View>
 
         {/* Duration Selector */}
-        <View style={globalStyles.section}>
-          <Text style={globalStyles.sectionTitle}>Duration</Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Duration</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -257,8 +256,8 @@ export default function HomeScreen() {
         </View>
 
         {/* Sound Selector */}
-        <View style={globalStyles.section}>
-          <Text style={globalStyles.sectionTitle}>Ambient Sound</Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Ambient Sound</Text>
           <TouchableOpacity
             style={globalStyles.selectBox}
             activeOpacity={0.8}
@@ -296,9 +295,9 @@ export default function HomeScreen() {
         </View>
 
         {/* Music Timing Config */}
-        <View style={globalStyles.section}>
-          <Text style={globalStyles.sectionTitle}>Music Flow Config</Text>
-          <View style={globalStyles.row}>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Music Flow Config</Text>
+          <View style={styles.row}>
             {/* Start / Warmup Config */}
             <TouchableOpacity
               style={styles.infoBox}
@@ -338,7 +337,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <View style={globalStyles.section}>
+        <View style={styles.section}>
           <TouchableOpacity
             style={styles.startButton}
             onPress={() => setShowTimer(true)}
@@ -352,6 +351,44 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  content: {
+    width: "100%",
+    padding: SPACING.lg,
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 42,
+    fontWeight: 300,
+    color: COLORS.text,
+    marginBottom: SPACING.sm,
+    letterSpacing: 2,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: COLORS.textSecondary,
+    marginBottom: SPACING.lg * 2,
+    letterSpacing: 2,
+  },
+  section: {
+    width: "100%",
+    marginBottom: SPACING.xl,
+    // paddingHorizontal: SPACING.md,
+  },
+  sectionTitle: {
+    color: COLORS.textSecondary,
+    fontSize: 14,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    marginBottom: SPACING.md,
+    textAlign: "center",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: SPACING.md,
+  },
+
   statsRow: {
     flexDirection: "row",
     alignItems: "center",
