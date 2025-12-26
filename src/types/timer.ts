@@ -1,4 +1,4 @@
-export type TimerPhase = "idle" | "warmup" | "deep" | "cooldown" | "completed";
+export type TimerPhase = "idle" | "warmup" | "deep" | "cooldown" | "ending" | "completed";
 
 export interface MeditationConfig {
   totalDuration: number; // in seconds

@@ -84,7 +84,7 @@ export const globalStyles = StyleSheet.create({
     color: COLORS.text,
     fontSize: 16,
     fontWeight: 500,
-    width: 200,
+    maxWidth: 200,
   },
   iconCircle: {
     width: 32,
@@ -109,5 +109,32 @@ export const globalStyles = StyleSheet.create({
   closeText: {
     color: COLORS.textSecondary,
     fontSize: 24,
+  },
+
+  actions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: SPACING.md,
+    paddingHorizontal: SPACING.md,
+    marginTop: SPACING.md,
+  },
+  buttonCancel: {
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.md,
+  },
+  buttonTextCancel: {
+    color: COLORS.textSecondary,
+    fontSize: 16,
+  },
+  buttonSave: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.xl,
+    borderRadius: 20,
+  },
+  buttonTextSave: {
+    color: COLORS.background,
+    fontSize: 16,
+    fontWeight: 600,
   },
 });

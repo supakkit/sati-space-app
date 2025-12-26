@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MeditationConfig, TimerPhase, TimerState } from "../types/timer";
 
 const TICK_RATE = 1000; // 1 second
+const START_FADE_OUT = 5; // 5 seconds
 
 export function useMeditationTimer(config: MeditationConfig) {
   const [state, setState] = useState<TimerState>({
@@ -19,6 +20,7 @@ export function useMeditationTimer(config: MeditationConfig) {
   ): TimerPhase => {
     if (elapsed >= cfg.totalDuration) return "completed";
     if (elapsed < cfg.warmupDuration) return "warmup";
+    if (elapsed >= cfg.totalDuration - START_FADE_OUT) return "ending";
     if (elapsed >= cfg.totalDuration - cfg.cooldownDuration) return "cooldown";
     return "deep";
   };

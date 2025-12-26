@@ -8,10 +8,13 @@ import {
 import { COLORS, SPACING } from "../constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { globalStyles } from "../styles/global-styles";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import TimerScreen from "./TimerScreen";
+import SoundPickerModal from "../components/SoundPickerModal";
+import { CUSTOM_SOUND, SOUND_LIBRARY } from "../constants/sound";
 
 const DURATION_OPTIONS = [
+  { label: "2m", value: 2 * 60 },
   { label: "5m", value: 5 * 60 },
   { label: "10m", value: 10 * 60 },
   { label: "20m", value: 20 * 60 },
@@ -25,11 +28,18 @@ const DURATION_OPTIONS = [
 
 export default function HomeScreen() {
   const [showTimer, setShowTimer] = useState(false);
+  const [showSoundPicker, setShowSoundPicker] = useState(false);
 
   // Config Timer State
   const [totalDuration, setTotalDuration] = useState(20 * 60);
   const [warmupDuration, setWarmupDuration] = useState(5 * 60);
   const [cooldownDuration, setCooldownDuration] = useState(60);
+
+  const [selectedSoundId, setSelectedSoundId] = useState(SOUND_LIBRARY[0].id);
+  const [customSoundSource, setCustomSoundSource] = useState<string | null>(
+    null
+  );
+  const [customSoundName, setCustomSoundName] = useState<string | null>(null);
 
   const handleSetDuration = (seconds: number) => {
     setTotalDuration(seconds);
@@ -66,6 +76,14 @@ export default function HomeScreen() {
     else setCooldownDuration(0);
   };
 
+  const [selectedSoundName, selectedSoundSource] = useMemo(() => {
+    if (selectedSoundId === CUSTOM_SOUND) {
+      return [customSoundName || "Custom Audio", customSoundSource];
+    }
+    const sound = SOUND_LIBRARY.find((s) => s.id === selectedSoundId);
+    return sound ? [sound.name, sound.asset] : ["Select Sound", null];
+  }, [selectedSoundId]);
+
   if (showTimer) {
     return (
       <TimerScreen
@@ -74,6 +92,7 @@ export default function HomeScreen() {
           warmupDuration,
           cooldownDuration,
         }}
+        soundSource={selectedSoundSource}
         onExit={() => setShowTimer(false)}
       />
     );
@@ -81,6 +100,15 @@ export default function HomeScreen() {
 
   return (
     <View style={globalStyles.container}>
+      <SoundPickerModal
+        visible={showSoundPicker}
+        onClose={() => setShowSoundPicker(false)}
+        selectedSoundId={selectedSoundId}
+        onSelect={(soundId: string) => setSelectedSoundId(soundId)}
+        customSoundSource={customSoundSource}
+        customSoundName={customSoundName}
+      />
+
       <ScrollView contentContainerStyle={globalStyles.content}>
         <Text style={globalStyles.title}>Sati Space</Text>
         <Text style={globalStyles.subtitle}>Find your inner peace</Text>
@@ -179,7 +207,11 @@ export default function HomeScreen() {
         {/* Sound Selector */}
         <View style={globalStyles.section}>
           <Text style={globalStyles.sectionTitle}>Ambient Sound</Text>
-          <TouchableOpacity style={globalStyles.selectBox} activeOpacity={0.8}>
+          <TouchableOpacity
+            style={globalStyles.selectBox}
+            activeOpacity={0.8}
+            onPress={() => setShowSoundPicker(true)}
+          >
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 12 }}
             >
@@ -200,7 +232,7 @@ export default function HomeScreen() {
                 />
               </View>
               <Text numberOfLines={1} style={globalStyles.selectBoxText}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum.
+                {selectedSoundName}
               </Text>
               <Ionicons
                 name="chevron-down"
@@ -231,7 +263,12 @@ export default function HomeScreen() {
             {/* Middle */}
             <View style={styles.infoBox}>
               <Text style={styles.infoLabel}>Deep Silence</Text>
-              <Text style={styles.infoValue}>5m</Text>
+              <Text style={styles.infoValue}>
+                {Math.floor(
+                  (totalDuration - warmupDuration - cooldownDuration) / 60
+                )}
+                m
+              </Text>
             </View>
 
             <View style={styles.lineSpacer} />

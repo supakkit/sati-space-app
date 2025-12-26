@@ -10,6 +10,8 @@ import { globalStyles } from "../styles/global-styles";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import { MeditationConfig, TimerPhase } from "../types/timer";
 import { useMeditationTimer } from "../hooks/useMeditationTimer";
+import { AudioSource } from "expo-audio";
+import { useMeditationAudio } from "../hooks/useMeditationAudio";
 
 const getPhaseLabel = (phase: TimerPhase) => {
   switch (phase) {
@@ -49,11 +51,13 @@ const DEFAULT_CONFIG: MeditationConfig = {
 
 type PropsType = {
   initialConfig?: MeditationConfig;
+  soundSource: AudioSource;
   onExit: () => void;
 };
 
 export default function TimerScreen({
   initialConfig = DEFAULT_CONFIG,
+  soundSource,
   onExit,
 }: PropsType) {
   const {
@@ -66,6 +70,13 @@ export default function TimerScreen({
     formatTime,
     progress,
   } = useMeditationTimer(initialConfig);
+
+  // Audio Control
+  const { resumeIfNeeded } = useMeditationAudio({
+    phase,
+    isRunning,
+    soundSource,
+  });
 
   const handleSaveSession = (totalDuration: number) => {};
 
@@ -99,7 +110,13 @@ export default function TimerScreen({
       {/* Control */}
       <View style={styles.controls}>
         {!isRunning && phase !== "completed" && (
-          <TouchableOpacity style={styles.mainButton} onPress={startTimer}>
+          <TouchableOpacity
+            style={styles.mainButton}
+            onPress={() => {
+              startTimer();
+              resumeIfNeeded();
+            }}
+          >
             <Text style={styles.mainButtonText}>
               {true ? "Start" : "Resume"}
             </Text>
