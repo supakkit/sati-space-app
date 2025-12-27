@@ -1,4 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as FileSystem from "expo-file-system";
+import { CUSTOM_SOUND } from "../constants/sound";
 
 export interface MeditationSession {
   id: string;
@@ -60,6 +62,22 @@ export const getStats = async (): Promise<MeditationStats> => {
   };
 };
 
+export const CUSTOM_SOUND_DIRECTORY = "custom_sounds";
+
+const getSoundsFolder = () => {
+  const soundsDir = new FileSystem.Directory(
+    FileSystem.Paths.document,
+    CUSTOM_SOUND_DIRECTORY
+  );
+
+  // Create it if it doesn't exist
+  if (!soundsDir.exists) {
+    soundsDir.create();
+  }
+
+  return soundsDir;
+};
+
 export interface Preset {
   id: string;
   name: string;
@@ -79,6 +97,36 @@ export const savePreset = async (preset: Omit<Preset, "id">) => {
       id: Date.now().toString(),
       ...preset,
     };
+
+    if (
+      newPreset.soundId === CUSTOM_SOUND &&
+      newPreset.customSoundName &&
+      newPreset.customSoundUri
+    ) {
+      const soundsDir = getSoundsFolder();
+
+      // Reference the source (the picked file in cache)
+      const sourceFile = new FileSystem.File(newPreset.customSoundUri);
+
+      // Create a permanent path in the Documents folder
+      const permanentFile = new FileSystem.File(
+        soundsDir,
+        newPreset.customSoundName
+      );
+
+      if (permanentFile.exists) {
+        const existingSize = permanentFile.size;
+
+        if (existingSize !== sourceFile.size) {
+          permanentFile.delete();
+          sourceFile.copy(permanentFile);
+        }
+      } else {
+        sourceFile.copy(permanentFile);
+      }
+
+      newPreset.customSoundUri = permanentFile.uri;
+    }
 
     const existing = await AsyncStorage.getItem(PRESET_KEY);
     const presets: Preset[] = existing ? JSON.parse(existing) : [];
@@ -104,6 +152,30 @@ export const deletePreset = async (id: string) => {
     const existing = await AsyncStorage.getItem(PRESET_KEY);
     if (!existing) return;
     const presets: Preset[] = JSON.parse(existing);
+
+    const presetToDelete = presets.find((p) => p.id === id);
+
+    if (
+      presetToDelete?.soundId === CUSTOM_SOUND &&
+      presetToDelete.customSoundUri
+    ) {
+      // Check if any OTHER preset uses this same file
+      const isFileShared = presets.some(
+        (p) => p.id !== id && p.customSoundUri === presetToDelete.customSoundUri
+      );
+
+      if (!isFileShared) {
+        try {
+          const file = new FileSystem.File(presetToDelete.customSoundUri);
+          if (file.exists) {
+            file.delete();
+          }
+        } catch (err) {
+          console.error("Cleanup error:", err);
+        }
+      }
+    }
+
     const filtered = presets.filter((p) => p.id !== id);
     await AsyncStorage.setItem(PRESET_KEY, JSON.stringify(filtered));
   } catch (err) {
