@@ -112,15 +112,15 @@ export default function HistoryScreen({ onClose }: PropsType) {
             />
           </View>
 
+          <View>
+            <Text style={globalStyles.sectionTitle}>Sessions</Text>
+          </View>
           <FlatList
             data={sessions}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}
             contentContainerStyle={styles.listContent}
-            ListHeaderComponent={
-              <Text style={globalStyles.sectionTitle}>Sessions</Text>
-            }
           />
         </View>
       )}

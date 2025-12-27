@@ -43,6 +43,23 @@ export const getSessions = async (): Promise<MeditationSession[]> => {
   }
 };
 
+export interface MeditationStats {
+  totalSessions: number;
+  totalMinutes: number;
+}
+
+export const getStats = async (): Promise<MeditationStats> => {
+  const sessions = await getSessions();
+  const totalSessions = sessions.length;
+  const totalMinutes =
+    sessions.reduce((acc, curr) => acc + curr.duration, 0) / 60;
+
+  return {
+    totalSessions,
+    totalMinutes,
+  };
+};
+
 export interface Preset {
   id: string;
   name: string;

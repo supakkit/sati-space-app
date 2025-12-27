@@ -134,8 +134,8 @@ export default function TimerScreen({
         {phase === "completed" && (
           <TouchableOpacity
             style={styles.mainButton}
-            onPress={() => {
-              saveSession({
+            onPress={async () => {
+              await saveSession({
                 duration: initialConfig.totalDuration,
                 soundName,
               });

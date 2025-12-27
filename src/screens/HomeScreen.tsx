@@ -13,7 +13,14 @@ import TimerScreen from "./TimerScreen";
 import SoundPickerModal from "../components/SoundPickerModal";
 import { CUSTOM_SOUND, SOUND_LIBRARY, SoundOption } from "../constants/sound";
 import SavePresetModal from "../components/SavePresetModal";
-import { deletePreset, getPresets, Preset, savePreset } from "../utils/storage";
+import {
+  deletePreset,
+  getPresets,
+  getStats,
+  MeditationStats,
+  Preset,
+  savePreset,
+} from "../utils/storage";
 import HistoryScreen from "./HistoryScreen";
 
 const DURATION_OPTIONS = [
@@ -45,10 +52,23 @@ export default function HomeScreen() {
   });
 
   const [presets, setPresets] = useState<Preset[]>([]);
+  const [stats, setStats] = useState<MeditationStats>({
+    totalSessions: 0,
+    totalMinutes: 0,
+  });
 
   useEffect(() => {
     loadPresets();
   }, []);
+
+  useEffect(() => {
+    if (!showTimer) loadStats();
+  }, [showTimer]);
+
+  const loadStats = async () => {
+    const stats = await getStats();
+    setStats(stats);
+  };
 
   const loadPresets = async () => {
     const presets = await getPresets();
@@ -184,11 +204,11 @@ export default function HomeScreen() {
         >
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>1</Text>
+              <Text style={styles.statValue}>{stats.totalSessions}</Text>
               <Text style={styles.statLabel}>Sessions</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>5</Text>
+              <Text style={styles.statValue}>{stats.totalMinutes}</Text>
               <Text style={styles.statLabel}>Minutes</Text>
             </View>
           </View>
