@@ -300,16 +300,27 @@ export default function HomeScreen() {
                 style={[
                   globalStyles.iconCircle,
                   {
-                    backgroundColor: true ? COLORS.primary : "transparent",
-                    borderWidth: true ? 0 : 1,
+                    backgroundColor:
+                      selectedSound.id === CUSTOM_SOUND
+                        ? COLORS.primary
+                        : "transparent",
+                    borderWidth: selectedSound.id === CUSTOM_SOUND ? 0 : 1,
                     borderColor: COLORS.textSecondary,
                   },
                 ]}
               >
                 <Ionicons
-                  name="folder-open"
+                  name={
+                    selectedSound.id === CUSTOM_SOUND
+                      ? "folder-open"
+                      : "musical-note"
+                  }
                   size={18}
-                  color={true ? COLORS.background : COLORS.textSecondary}
+                  color={
+                    selectedSound.id === CUSTOM_SOUND
+                      ? COLORS.background
+                      : COLORS.textSecondary
+                  }
                 />
               </View>
               <Text numberOfLines={1} style={globalStyles.selectBoxText}>

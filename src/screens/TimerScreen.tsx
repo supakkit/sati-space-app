@@ -120,7 +120,7 @@ export default function TimerScreen({
             }}
           >
             <Text style={styles.mainButtonText}>
-              {true ? "Start" : "Resume"}
+              {phase === "idle" ? "Start" : "Resume"}
             </Text>
           </TouchableOpacity>
         )}
