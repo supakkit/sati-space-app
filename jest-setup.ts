@@ -17,3 +17,11 @@ jest.mock("@expo/vector-icons", () => {
       }),
   };
 });
+
+jest.mock("expo-crypto", () => {
+  let counter = 0;
+
+  return {
+    randomUUID: jest.fn(() => `test-uuid-${++counter}`),
+  };
+});

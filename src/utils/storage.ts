@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from "expo-file-system";
 import { CUSTOM_SOUND } from "../constants/sound";
-import { randomUUID } from 'crypto';
+import * as Crypto from 'expo-crypto';
 
 export interface MeditationSession {
   id: string;
@@ -17,7 +17,7 @@ export const saveSession = async (
 ) => {
   try {
     const newSession: MeditationSession = {
-      id: randomUUID(),
+      id: Crypto.randomUUID(),
       timestamp: Date.now(),
       ...session,
     };
@@ -95,7 +95,7 @@ const PRESET_KEY = "@sati_space_presets";
 export const savePreset = async (preset: Omit<Preset, "id">) => {
   try {
     const newPreset: Preset = {
-      id: randomUUID(),
+      id: Crypto.randomUUID(),
       ...preset,
     };
 

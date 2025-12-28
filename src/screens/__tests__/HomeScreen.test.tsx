@@ -88,7 +88,9 @@ it("renders presets from storage", async () => {
 it("opens timer screen when Begin Session is pressed", async () => {
   const { getByText } = render(<HomeScreen />);
 
-  fireEvent.press(getByText("Begin Session"));
+  await waitFor(() => {
+    fireEvent.press(getByText("Begin Session"));
+  });
 
   expect(getByText("TIMER_SCREEN")).toBeTruthy();
 });
