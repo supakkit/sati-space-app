@@ -14,17 +14,17 @@ This project was built as a **portfolio application**, showcasing mobile app dev
 
 Unlike typical meditation apps that play continuous audio, **Sati Space** emphasizes:
 
-* Long silent periods for deep meditation
-* Gentle sound cues to mark transitions
-* Full control over timing and audio sources (including user-provided files)
+- Long silent periods for deep meditation
+- Gentle sound cues to mark transitions
+- Full control over timing and audio sources (including user-provided files)
 
 ---
 
 ## 📱 Platform Support
 
-* ✅ **Android** (APK available)
-* ⏳ iOS (not supported yet)
-* ❌ Web (not supported — mobile-first design)
+- ✅ **Android** (APK available)
+- ⏳ iOS (not supported yet)
+- ❌ Web (not supported — mobile-first design)
 
 ---
 
@@ -41,10 +41,18 @@ Unlike typical meditation apps that play continuous audio, **Sati Space** emphas
 
 ## 🖼 Screenshots
 
-<img src="./assets/snapshots/home-screen.png" alt="Home screen" width="250" />
-<img src="./assets/snapshots/timer-screen.png" alt="Timer screen" width="250" />
-<img src="./assets/snapshots/history-screen.png" alt="History screen" width="250" />
-<img src="./assets/snapshots/audio-selection-screen.png" alt="Audio selection screen" width="250" />
+<p align="center">
+<img src="./assets/snapshots/home-screen.png" alt="Home screen" width="300" />
+</p>
+<p align="center">
+<img src="./assets/snapshots/timer-screen.png" alt="Timer screen" width="300" />
+</p>
+<p align="center">
+<img src="./assets/snapshots/history-screen.png" alt="History screen" width="300" />
+</p>
+<p align="center">
+<img src="./assets/snapshots/audio-selection-screen.png" alt="Audio selection screen" width="300" />
+</p>
 
 ---
 
@@ -52,38 +60,39 @@ Unlike typical meditation apps that play continuous audio, **Sati Space** emphas
 
 ### ⏱ Timer & Session Management
 
-* Custom meditation duration (preset or manual)
-* Visual countdown timer
-* Pause / resume during session
-* Session completion feedback
+- Custom meditation duration (preset or manual)
+- Visual countdown timer
+- Pause / resume during session
+- Session completion feedback
 
 ---
 
 ### 🎵 Intelligent Background Music Control
 
-* Music plays only during selected time windows
+- Music plays only during selected time windows
 
-  * Example: first 5 minutes & last 1 minute
-* Silent middle period for deep focus
-* Smooth audio fade in/out
-* Volume control
+  - Example: first 5 minutes & last 1 minute
+
+- Silent middle period for deep focus
+- Smooth audio fade in/out
+- Volume control
 
 ---
 
 ### 🔊 Audio Library & Custom Sounds
 
-* Built-in ambient sounds (e.g. nature, bowls, white noise)
-* Preview sounds before starting
-* **Use your own audio files** from device storage
-* Option for complete silence
+- Built-in ambient sounds (e.g. nature, bowls, white noise)
+- Preview sounds before starting
+- **Use your own audio files** from device storage
+- Option for complete silence
 
 ---
 
 ### ⚙️ Session Presets
 
-* Save favorite configurations
-* Quick-start with presets
-* Beginner-friendly default presets
+- Save favorite configurations
+- Quick-start with presets
+- Beginner-friendly default presets
 
 ---
 
@@ -104,39 +113,39 @@ Unlike typical meditation apps that play continuous audio, **Sati Space** emphas
 
 ### Core
 
-* **Expo (Managed Workflow)**
-* **React Native**
-* **TypeScript**
+- **Expo (Managed Workflow)**
+- **React Native**
+- **TypeScript**
 
 ### Audio & Native APIs
 
-* `expo-audio`
-* `expo-document-picker`
-* `expo-file-system`
-* `expo-crypto` (UUID generation)
+- `expo-audio`
+- `expo-document-picker`
+- `expo-file-system`
+- `expo-crypto` (UUID generation)
 
 ### State & Storage
 
-* `@react-native-async-storage/async-storage`
-* Deterministic UUID handling for session data
+- `@react-native-async-storage/async-storage`
+- Deterministic UUID handling for session data
 
 ### UI
 
-* `@expo/vector-icons`
-* `react-native-svg`
-* `react-native-chart-kit`
-* `react-native-circular-progress`
-* Mobile-first, distraction-free design
+- `@expo/vector-icons`
+- `react-native-svg`
+- `react-native-chart-kit`
+- `react-native-circular-progress`
+- Mobile-first, distraction-free design
 
 ---
 
 ## 🧪 Testing
 
-* **Jest**
-* **jest-expo**
-* **@testing-library/react-native**
-* Deterministic mocks for native APIs
-* Proper handling of async state updates (`act`, `waitFor`)
+- **Jest**
+- **jest-expo**
+- **@testing-library/react-native**
+- Deterministic mocks for native APIs
+- Proper handling of async state updates (`act`, `waitFor`)
 
 Run tests:
 
@@ -156,9 +165,9 @@ npm run test:debug
 
 ### Prerequisites
 
-* Node.js (LTS)
-* Expo CLI (via `npx`)
-* Android device or emulator
+- Node.js (LTS)
+- Expo CLI (via `npx`)
+- Android device or emulator
 
 ### Install dependencies
 
@@ -187,14 +196,14 @@ eas build -p android --profile preview
 
 This generates an installable APK suitable for:
 
-* Portfolio demos
-* Internal testing
-* Non–Play Store distribution
+- Portfolio demos
+- Internal testing
+- Non–Play Store distribution
 
 ---
 
 ## 🗺 Roadmap (Future Ideas)
 
-* Background playback when screen is locked
-* Guided meditation intervals
-* iOS support
+- Background playback when screen is locked
+- Guided meditation intervals
+- iOS support
