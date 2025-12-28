@@ -3,7 +3,7 @@ import { TimerPhase } from "../types/timer";
 import { BELL_SOUND } from "../constants/sound";
 import { useEffect, useRef } from "react";
 
-const MAX_MUSIC_VOLUME = 0.7;
+const MAX_MUSIC_VOLUME = 1;
 const MAX_BELL_VOLUME = 1;
 
 type PropsType = {

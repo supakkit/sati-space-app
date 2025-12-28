@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Modal,
   ScrollView,
@@ -13,6 +13,9 @@ import { globalStyles } from "../styles/global-styles";
 import { CUSTOM_SOUND, SOUND_LIBRARY, SoundOption } from "../constants/sound";
 import { useAudioPlayer } from "expo-audio";
 import * as DocumentPicker from "expo-document-picker";
+import { useResponsiveScale } from "../utils/responsive";
+
+const { scale } = useResponsiveScale();
 
 type PropsType = {
   visible: boolean;
@@ -111,7 +114,7 @@ export default function SoundPickerModal({
                         ? "radio-button-on"
                         : "radio-button-off"
                     }
-                    size={20}
+                    size={20 * scale}
                     color={
                       currentSound.id === sound.id
                         ? COLORS.primary
@@ -152,7 +155,7 @@ export default function SoundPickerModal({
                       ? "radio-button-on"
                       : "radio-button-off"
                   }
-                  size={20}
+                  size={20 * scale}
                   color={
                     currentSound.id === CUSTOM_SOUND
                       ? COLORS.primary
@@ -178,7 +181,7 @@ export default function SoundPickerModal({
 
                 <Ionicons
                   name="folder-open-outline"
-                  size={18}
+                  size={18 * scale}
                   color={COLORS.textSecondary}
                   style={{ marginLeft: "auto" }}
                 />
@@ -217,21 +220,22 @@ export default function SoundPickerModal({
 const styles = StyleSheet.create({
   dropdownContainer: {
     width: "100%",
-    maxHeight: "60%",
+    maxWidth: 640,
+    maxHeight: "80%",
     backgroundColor: COLORS.surface,
-    borderRadius: 20,
-    paddingVertical: SPACING.md,
+    borderRadius: 20 * scale,
+    paddingVertical: SPACING.md * scale,
   },
   list: {
     width: "100%",
-    marginTop: SPACING.sm,
+    marginTop: SPACING.sm * scale,
   },
   item: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.sm * scale,
+    paddingHorizontal: SPACING.lg * scale,
   },
   itemActive: {
     backgroundColor: "rgba(255,255,255,0.05)",
@@ -240,13 +244,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    gap: SPACING.md,
-    paddingVertical: SPACING.sm,
+    gap: SPACING.md * scale,
+    paddingVertical: SPACING.sm * scale,
   },
   itemText: {
     color: COLORS.textSecondary,
-    fontSize: 16,
-    maxWidth: 280,
+    fontSize: 16 * scale,
+    letterSpacing: 1 * scale,
+    maxWidth: 280 * scale,
   },
   itemTextActive: {
     color: COLORS.text,
@@ -254,16 +259,17 @@ const styles = StyleSheet.create({
   },
   subText: {
     color: COLORS.textSecondary,
-    fontSize: 12,
+    fontSize: 12 * scale,
+    letterSpacing: 1 * scale,
     opacity: 0.7,
     maxWidth: 200,
   },
   divider: {
-    height: 1,
+    height: 1 * scale,
     backgroundColor: "rgba(255,255,255,0.1)",
     marginVertical: SPACING.sm,
   },
   previewButton: {
-    padding: SPACING.sm,
+    padding: SPACING.sm * scale,
   },
 });

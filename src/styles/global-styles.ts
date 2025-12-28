@@ -1,5 +1,8 @@
 import { StyleSheet } from "react-native";
 import { COLORS, SPACING } from "../constants/theme";
+import { useResponsiveScale } from "../utils/responsive";
+
+const { scale } = useResponsiveScale();
 
 export const globalStyles = StyleSheet.create({
   container: {
@@ -7,40 +10,39 @@ export const globalStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-    section: {
+  section: {
     width: "100%",
-    marginBottom: SPACING.xl,
-    // paddingHorizontal: SPACING.md,
+    marginBottom: SPACING.lg * scale,
   },
   sectionTitle: {
     color: COLORS.textSecondary,
-    fontSize: 14,
+    fontSize: 14 * scale,
+    letterSpacing: 1 * scale,
     textTransform: "uppercase",
-    letterSpacing: 1,
-    marginBottom: SPACING.md,
+    marginBottom: SPACING.md * scale,
     textAlign: "center",
   },
   row: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: SPACING.md,
+    gap: SPACING.md * scale,
   },
-  
+
   scrollChipContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: SPACING.md,
-    paddingHorizontal: SPACING.sm,
+    gap: SPACING.md * scale,
+    paddingHorizontal: SPACING.sm * scale,
   },
   chip: {
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.lg,
-    borderRadius: 20,
-    borderWidth: 1,
+    paddingVertical: SPACING.sm * scale,
+    paddingHorizontal: SPACING.lg * scale,
+    borderRadius: 20 * scale,
+    borderWidth: 1 * scale,
     borderColor: COLORS.surface,
     backgroundColor: "transparent",
-    marginBottom: SPACING.sm,
+    marginBottom: SPACING.sm * scale,
   },
   chipActive: {
     backgroundColor: COLORS.surface,
@@ -48,16 +50,17 @@ export const globalStyles = StyleSheet.create({
   },
   chipText: {
     color: COLORS.textSecondary,
-    fontSize: 16,
+    fontSize: 16 * scale,
+    letterSpacing: 1 * scale,
   },
   chipTextActive: {
     color: COLORS.text,
     fontWeight: 600,
   },
   chipActiveBadge: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
+    width: 6 * scale,
+    height: 6 * scale,
+    borderRadius: 3 * scale,
     backgroundColor: COLORS.primary,
   },
 
@@ -66,19 +69,20 @@ export const globalStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: COLORS.surface,
-    padding: SPACING.md,
-    borderRadius: 16,
+    padding: SPACING.md * scale,
+    borderRadius: 16 * scale,
   },
   selectBoxText: {
     color: COLORS.text,
-    fontSize: 16,
+    fontSize: 16 * scale,
+    letterSpacing: 1 * scale,
     fontWeight: 500,
-    maxWidth: 200,
+    maxWidth: 200 * scale,
   },
   iconCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 32 * scale,
+    height: 32 * scale,
+    borderRadius: 16 * scale,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -87,32 +91,34 @@ export const globalStyles = StyleSheet.create({
     position: "absolute",
     top: 60,
     right: 30,
-    padding: 10,
+    padding: 10 * scale,
   },
 
   actions: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    gap: SPACING.md,
-    marginTop: SPACING.md,
+    gap: SPACING.md * scale,
+    marginTop: SPACING.md * scale,
   },
   buttonCancel: {
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm * scale,
+    paddingHorizontal: SPACING.md * scale,
   },
   buttonTextCancel: {
     color: COLORS.textSecondary,
-    fontSize: 16,
+    fontSize: 16 * scale,
+    letterSpacing: 1 * scale,
   },
   buttonSave: {
     backgroundColor: COLORS.primary,
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.xl,
-    borderRadius: 20,
+    paddingVertical: SPACING.sm * scale,
+    paddingHorizontal: SPACING.xl * scale,
+    borderRadius: 20 * scale,
   },
   buttonTextSave: {
     color: COLORS.background,
-    fontSize: 16,
+    fontSize: 16 * scale,
+    letterSpacing: 1 * scale,
     fontWeight: 600,
   },
 
@@ -120,22 +126,23 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: SPACING.lg,
+    padding: SPACING.lg * scale,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
   modalHeaderTitle: {
     color: COLORS.textSecondary,
-    fontSize: 18,
+    fontSize: 18 * scale,
+    letterSpacing: 1 * scale,
     textAlign: "center",
     textTransform: "uppercase",
-    letterSpacing: 1,
-    paddingHorizontal: SPACING.lg,
-    marginBottom: SPACING.sm,
+    paddingHorizontal: SPACING.lg * scale,
+    marginBottom: SPACING.sm * scale,
   },
   modalSubtitle: {
     color: COLORS.textSecondary,
-    fontSize: 14,
-    textAlign: 'center',
-    marginBottom: SPACING.lg,
+    fontSize: 14 * scale,
+    letterSpacing: 1 * scale,
+    textAlign: "center",
+    marginBottom: SPACING.lg * scale,
   },
 });

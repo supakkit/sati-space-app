@@ -1,9 +1,9 @@
 import {
-  Dimensions,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { globalStyles } from "../styles/global-styles";
@@ -12,8 +12,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { ContributionGraph } from "react-native-chart-kit";
 import { getSessions, MeditationSession } from "../utils/storage";
 import { useEffect, useState } from "react";
+import { useResponsiveScale } from "../utils/responsive";
 
-const { width } = Dimensions.get("window");
+const { scale } = useResponsiveScale();
 
 type PropsType = {
   onClose: () => void;
@@ -24,6 +25,8 @@ export default function HistoryScreen({ onClose }: PropsType) {
   const [commitsData, setCommitsData] = useState<
     { date: string; count: number }[]
   >([]);
+
+  const { width, height } = useWindowDimensions();
 
   useEffect(() => {
     loadHistory();
@@ -74,26 +77,39 @@ export default function HistoryScreen({ onClose }: PropsType) {
       <View style={styles.header}>
         <Text style={styles.title}>History</Text>
         <TouchableOpacity onPress={onClose}>
-          <Ionicons name="close" size={24} color={COLORS.text} />
+          <Ionicons name="close" size={24 * scale} color={COLORS.text} />
         </TouchableOpacity>
       </View>
 
-      {false ? (
+      {sessions.length === 0 ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyText}>
             No sessions yet. Start your journey!
           </Text>
         </View>
       ) : (
-        <View style={{ flex: 1 }}>
-          <View style={globalStyles.section}>
+        <View
+          style={[
+            styles.historyContainer,
+            {
+              flexDirection: width > height ? "row" : "column",
+            },
+            width > height
+              ? {
+                  justifyContent: "space-evenly",
+                  width: "100%",
+                }
+              : null,
+          ]}
+        >
+          <View>
             <Text style={globalStyles.sectionTitle}>Activity</Text>
             <ContributionGraph
               values={commitsData}
               endDate={new Date()}
-              numDays={100}
-              width={width - SPACING.lg * 2}
-              height={220}
+              numDays={105}
+              width={(20 * 17 + SPACING.lg * 2) * scale}
+              height={220 * scale}
               chartConfig={{
                 backgroundColor: COLORS.background,
                 backgroundGradientFrom: COLORS.surface,
@@ -101,27 +117,32 @@ export default function HistoryScreen({ onClose }: PropsType) {
                 decimalPlaces: 0,
                 color: (opacity = 1) => `rgba(164, 212, 174, ${opacity})`, // primary color variant
                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                propsForLabels: {
+                  fontSize: 16 * scale,
+                  fontWeight: 700,
+                  letterSpacing: 1 * scale,
+                },
               }}
               style={{
-                borderRadius: 16,
+                borderRadius: 16 * scale,
                 justifyContent: "center",
               }}
-              gutterSize={2}
-              squareSize={18}
+              gutterSize={2 * scale}
+              squareSize={18 * scale}
               tooltipDataAttrs={() => ({})}
             />
           </View>
 
           <View>
             <Text style={globalStyles.sectionTitle}>Sessions</Text>
+            <FlatList
+              data={sessions}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+              style={styles.list}
+              contentContainerStyle={styles.listContent}
+            />
           </View>
-          <FlatList
-            data={sessions}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            style={styles.list}
-            contentContainerStyle={styles.listContent}
-          />
         </View>
       )}
     </View>
@@ -134,13 +155,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: SPACING.lg,
-    paddingTop: SPACING.xl,
-    borderBottomWidth: 1,
+    padding: SPACING.lg * scale,
+    paddingTop: SPACING.xl * scale,
+    borderBottomWidth: 1 * scale,
     borderBottomColor: COLORS.surface,
   },
   title: {
-    fontSize: 24,
+    fontSize: 24 * scale,
+    letterSpacing: 1 * scale,
     color: COLORS.text,
     fontWeight: 600,
   },
@@ -151,38 +173,47 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     color: COLORS.textSecondary,
-    fontSize: 16,
+    fontSize: 16 * scale,
+    letterSpacing: 1 * scale,
+  },
+  historyContainer: {
+    flex: 1,
+    gap: SPACING.md * scale,
   },
   historyItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: COLORS.surface,
-    padding: SPACING.md,
-    marginBottom: SPACING.sm,
-    borderRadius: 12,
+    padding: SPACING.md * scale,
+    marginBottom: SPACING.sm * scale,
+    borderRadius: 12 * scale,
   },
   historyDate: {
     color: COLORS.text,
-    fontSize: 16,
-    fontWeight: "500",
+    fontSize: 16 * scale,
+    fontWeight: 500,
+    letterSpacing: 1 * scale,
   },
   historySound: {
     color: COLORS.textSecondary,
-    fontSize: 12,
-    marginTop: 2,
+    fontSize: 12 * scale,
+    marginTop: 2 * scale,
     textTransform: "capitalize",
+    letterSpacing: 1 * scale,
   },
   historyDuration: {
     color: COLORS.primary,
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 18 * scale,
+    fontWeight: 600,
+    letterSpacing: 1 * scale,
   },
   list: {
     flex: 1,
   },
   listContent: {
-    padding: SPACING.md,
+    padding: SPACING.md * scale,
     paddingTop: 0,
+    minWidth: 300 * scale,
   },
 });

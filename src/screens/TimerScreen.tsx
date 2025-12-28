@@ -1,8 +1,8 @@
 import {
-  Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { COLORS, SPACING } from "../constants/theme";
@@ -14,6 +14,9 @@ import { AudioSource } from "expo-audio";
 import { useMeditationAudio } from "../hooks/useMeditationAudio";
 import { Ionicons } from "@expo/vector-icons";
 import { saveSession } from "../utils/storage";
+import { useResponsiveScale } from "../utils/responsive";
+
+const { scale } = useResponsiveScale();
 
 const getPhaseLabel = (phase: TimerPhase) => {
   switch (phase) {
@@ -42,8 +45,6 @@ const getPhaseColor = (phase: TimerPhase) => {
       return COLORS.text;
   }
 };
-
-const { width } = Dimensions.get("window");
 
 const DEFAULT_CONFIG: MeditationConfig = {
   totalDuration: 5 * 60, // 5 mins total
@@ -82,132 +83,153 @@ export default function TimerScreen({
     soundSource,
   });
 
+  const { width, height } = useWindowDimensions();
+
   return (
     <View style={globalStyles.container}>
       {/* Exit */}
       <TouchableOpacity onPress={onExit} style={globalStyles.closeButton}>
-        <Ionicons name="close" size={24} color={COLORS.text} />
+        <Ionicons name="close" size={24 * scale} color={COLORS.text} />
       </TouchableOpacity>
 
-      {/* Main Timer Display */}
-      <AnimatedCircularProgress
-        rotation={0}
-        size={width * 0.7}
-        width={4}
-        fill={progress * 100} // dynamic value (0-100)
-        tintColor={COLORS.primary}
-        backgroundColor={COLORS.surface}
-        style={styles.timerCircle}
+      <View
+        style={[
+          styles.timerContainer,
+          { flexDirection: width > height ? "row" : "column" },
+        ]}
       >
-        {() => (
-          <>
-            <Text style={[styles.phaseText, { color: getPhaseColor(phase) }]}>
-              {getPhaseLabel(phase)}
-            </Text>
-            <Text style={styles.timeText}>{formatTime(remainingTime)}</Text>
-          </>
-        )}
-      </AnimatedCircularProgress>
+        {/* Main Timer Display */}
+        <AnimatedCircularProgress
+          rotation={0}
+          size={Math.min(width, height) * 0.8}
+          width={4 * scale}
+          fill={progress * 100} // dynamic value (0-100)
+          tintColor={COLORS.primary}
+          backgroundColor={COLORS.surface}
+        >
+          {() => (
+            <>
+              <Text style={[styles.phaseText, { color: getPhaseColor(phase) }]}>
+                {getPhaseLabel(phase)}
+              </Text>
+              <Text style={styles.timeText}>{formatTime(remainingTime)}</Text>
+            </>
+          )}
+        </AnimatedCircularProgress>
 
-      {/* Control */}
-      <View style={styles.controls}>
-        {!isRunning && phase !== "completed" && (
-          <TouchableOpacity
-            style={styles.mainButton}
-            onPress={() => {
-              startTimer();
-              resumeIfNeeded();
-            }}
-          >
-            <Text style={styles.mainButtonText}>
-              {phase === "idle" ? "Start" : "Resume"}
-            </Text>
-          </TouchableOpacity>
-        )}
+        {/* Control */}
+        <View
+          style={[
+            styles.controls,
+            { flexDirection: width > height ? "column" : "row" },
+          ]}
+        >
+          {!isRunning && phase !== "completed" && (
+            <TouchableOpacity
+              style={styles.mainButton}
+              onPress={() => {
+                startTimer();
+                resumeIfNeeded();
+              }}
+            >
+              <Text style={styles.mainButtonText}>
+                {phase === "idle" ? "Start" : "Resume"}
+              </Text>
+            </TouchableOpacity>
+          )}
 
-        {isRunning && (
-          <TouchableOpacity style={styles.secondaryButton} onPress={pauseTimer}>
-            <Text style={styles.secondaryButtonText}>Pause</Text>
-          </TouchableOpacity>
-        )}
+          {isRunning && (
+            <TouchableOpacity
+              style={styles.secondaryButton}
+              onPress={pauseTimer}
+            >
+              <Text style={styles.secondaryButtonText}>Pause</Text>
+            </TouchableOpacity>
+          )}
 
-        {phase === "completed" && (
-          <TouchableOpacity
-            style={styles.mainButton}
-            onPress={async () => {
-              await saveSession({
-                duration: initialConfig.totalDuration,
-                soundName,
-              });
-              onExit();
-            }}
-          >
-            <Text style={styles.mainButtonText}>Save Session</Text>
-          </TouchableOpacity>
-        )}
+          {phase === "completed" && (
+            <TouchableOpacity
+              style={styles.mainButton}
+              onPress={async () => {
+                await saveSession({
+                  duration: initialConfig.totalDuration,
+                  soundName,
+                });
+                onExit();
+              }}
+            >
+              <Text style={styles.mainButtonText}>Save Session</Text>
+            </TouchableOpacity>
+          )}
 
-        {phase !== "idle" && phase !== "completed" && (
-          <TouchableOpacity style={styles.resetButton} onPress={resetTimer}>
-            <Text style={styles.resetButtonText}>Stop</Text>
-          </TouchableOpacity>
-        )}
+          {phase !== "idle" && phase !== "completed" && (
+            <TouchableOpacity style={styles.resetButton} onPress={resetTimer}>
+              <Text style={styles.resetButtonText}>Stop</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  timerCircle: {
-    marginBottom: SPACING.xl,
+  timerContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    gap: SPACING.xl * scale,
   },
   phaseText: {
-    fontSize: 18,
-    marginBottom: SPACING.sm,
+    fontSize: 18 * scale,
+    marginBottom: SPACING.sm * scale,
     fontWeight: 500,
-    letterSpacing: 1,
+    letterSpacing: 1 * scale,
   },
   timeText: {
-    fontSize: 64,
+    fontSize: 64 * scale,
+    letterSpacing: 1 * scale,
     color: COLORS.text,
     fontVariant: ["tabular-nums"],
     fontWeight: 200,
   },
   controls: {
-    flexDirection: "row",
     alignItems: "center",
-    gap: SPACING.md,
+    gap: SPACING.md * scale,
   },
   mainButton: {
     backgroundColor: COLORS.primary,
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.xl,
-    borderRadius: 30,
-    minWidth: 140,
+    paddingVertical: SPACING.md * scale,
+    paddingHorizontal: SPACING.lg * scale,
+    borderRadius: 30 * scale,
+    minWidth: 140 * scale,
     alignItems: "center",
   },
   mainButtonText: {
     color: COLORS.background,
-    fontSize: 18,
+    fontSize: 18 * scale,
+    letterSpacing: 1 * scale,
     fontWeight: 600,
   },
   secondaryButton: {
-    borderWidth: 1,
     backgroundColor: COLORS.textSecondary,
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.xl,
-    borderRadius: 30,
-    minWidth: 140,
+    paddingVertical: SPACING.md * scale,
+    paddingHorizontal: SPACING.lg * scale,
+    borderRadius: 30 * scale,
+    minWidth: 140 * scale,
     alignItems: "center",
   },
   secondaryButtonText: {
-    fontSize: 18,
+    fontSize: 18 * scale,
+    letterSpacing: 1 * scale,
     fontWeight: 600,
   },
   resetButton: {
-    padding: SPACING.md,
+    padding: SPACING.md * scale,
   },
   resetButtonText: {
     color: COLORS.textSecondary,
-    fontSize: 18,
+    fontSize: 18 * scale,
+    letterSpacing: 1 * scale,
   },
 });

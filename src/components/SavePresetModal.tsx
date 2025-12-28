@@ -9,6 +9,9 @@ import {
 import { globalStyles } from "../styles/global-styles";
 import { COLORS, SPACING } from "../constants/theme";
 import { useState } from "react";
+import { useResponsiveScale } from "../utils/responsive";
+
+const { scale } = useResponsiveScale();
 
 type PropsType = {
   visible: boolean;
@@ -71,16 +74,18 @@ export default function SavePresetModal({
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    maxWidth: 640,
     backgroundColor: COLORS.surface,
-    padding: SPACING.md,
-    borderRadius: 20,
+    padding: SPACING.lg * scale,
+    borderRadius: 20 * scale,
   },
   input: {
     backgroundColor: COLORS.background,
     color: COLORS.text,
-    padding: SPACING.md,
-    borderRadius: 12,
-    fontSize: 16,
-    marginBottom: SPACING.sm,
+    padding: SPACING.md * scale,
+    borderRadius: 12 * scale,
+    fontSize: 16 * scale,
+    letterSpacing: 1 * scale,
+    marginBottom: SPACING.sm * scale,
   },
 });

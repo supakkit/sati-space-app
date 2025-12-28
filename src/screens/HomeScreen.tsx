@@ -23,6 +23,9 @@ import {
   savePreset,
 } from "../utils/storage";
 import HistoryScreen from "./HistoryScreen";
+import { useResponsiveScale } from "../utils/responsive";
+
+const { scale } = useResponsiveScale();
 
 const DURATION_OPTIONS = [
   { label: "2m", value: 2 * 60 },
@@ -299,7 +302,11 @@ export default function HomeScreen() {
             onPress={() => setShowSoundPicker(true)}
           >
             <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 12 }}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 12 * scale,
+              }}
             >
               <View
                 style={[
@@ -320,7 +327,7 @@ export default function HomeScreen() {
                       ? "folder-open"
                       : "musical-note"
                   }
-                  size={18}
+                  size={18 * scale}
                   color={
                     selectedSound.id === CUSTOM_SOUND
                       ? COLORS.background
@@ -333,7 +340,7 @@ export default function HomeScreen() {
               </Text>
               <Ionicons
                 name="chevron-down"
-                size={20}
+                size={20 * scale}
                 color={COLORS.textSecondary}
               />
             </View>
@@ -399,74 +406,81 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   content: {
     width: "100%",
-    padding: SPACING.lg,
+    padding: SPACING.lg * scale,
     alignItems: "center",
   },
   logo: {
-    width: 200,
-    height: 100,
-    marginBottom: 2,
+    width: 200 * scale,
+    height: 100 * scale,
+    marginBottom: 2 * scale,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 12 * scale,
+    letterSpacing: 1 * scale,
     color: COLORS.textSecondary,
-    marginBottom: SPACING.lg,
-    letterSpacing: 2,
+    marginBottom: SPACING.lg * scale,
   },
 
   statsRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: SPACING.xl,
+    marginBottom: SPACING.xl * scale,
     backgroundColor: COLORS.surface,
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.xl,
-    borderRadius: 20,
-    gap: SPACING.xl,
+    paddingVertical: SPACING.md * scale,
+    paddingHorizontal: SPACING.xl * scale,
+    borderRadius: 20 * scale,
+    gap: SPACING.xl * scale,
   },
   statItem: {
     alignItems: "center",
   },
   statValue: {
-    fontSize: 24,
+    fontSize: 24 * scale,
+    letterSpacing: 1 * scale,
     fontWeight: 700,
     color: COLORS.primary,
   },
   statLabel: {
-    fontSize: 12,
+    fontSize: 12 * scale,
+    letterSpacing: 1 * scale,
     color: COLORS.textSecondary,
-    letterSpacing: 1,
-    marginTop: 4,
+    marginTop: 4 * scale,
   },
 
   presetHeader: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: SPACING.md,
-    paddingHorizontal: SPACING.md,
+    marginBottom: SPACING.md * scale,
+    paddingHorizontal: SPACING.md * scale,
   },
   presetTitle: {
+    fontSize: 14 * scale,
+    letterSpacing: 1 * scale,
     marginBottom: 0,
     textAlign: "left",
     marginLeft: 0,
   },
   presetAddButton: {
+    fontSize: 14 * scale,
+    letterSpacing: 1 * scale,
     color: COLORS.primary,
     fontWeight: 600,
-    marginLeft: SPACING.sm,
+    marginLeft: SPACING.sm * scale,
   },
   presetNoItemContainer: {
     alignItems: "center",
   },
   presetNoItemText: {
+    fontSize: 14 * scale,
+    letterSpacing: 1 * scale,
     color: COLORS.textSecondary,
     fontStyle: "italic",
   },
   presetItem: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 8 * scale,
   },
 
   infoBox: {
@@ -474,33 +488,31 @@ const styles = StyleSheet.create({
   },
   infoLabel: {
     color: COLORS.textSecondary,
-    fontSize: 12,
-    marginBottom: 4,
+    fontSize: 12 * scale,
+    letterSpacing: 1 * scale,
+    marginBottom: 4 * scale,
   },
   infoValue: {
     color: COLORS.text,
-    fontSize: 18,
+    fontSize: 18 * scale,
+    letterSpacing: 1 * scale,
     fontWeight: 500,
   },
   lineSpacer: {
-    width: 20,
-    height: 1,
+    width: 20 * scale,
+    height: 1 * scale,
     backgroundColor: COLORS.surface,
   },
   startButton: {
     backgroundColor: COLORS.primary,
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.xl * 2,
-    borderRadius: 30,
-    elevation: 4,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    paddingVertical: SPACING.md * scale,
+    paddingHorizontal: SPACING.xl * 2 * scale,
+    borderRadius: 30 * scale,
   },
   startButtonText: {
     color: COLORS.background,
-    fontSize: 18,
+    fontSize: 18 * scale,
+    letterSpacing: 1 * scale,
     fontWeight: 600,
   },
 });
