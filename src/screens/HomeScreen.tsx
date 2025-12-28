@@ -1,4 +1,5 @@
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -194,7 +195,11 @@ export default function HomeScreen() {
       />
 
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Sati Space</Text>
+        <Image
+          source={require("../../assets/images/icon.png")}
+          alt="logo"
+          style={styles.logo}
+        />
         <Text style={styles.subtitle}>Find your inner peace</Text>
 
         {/* Stats Section */}
@@ -397,17 +402,15 @@ const styles = StyleSheet.create({
     padding: SPACING.lg,
     alignItems: "center",
   },
-  title: {
-    fontSize: 42,
-    fontWeight: 300,
-    color: COLORS.text,
-    marginBottom: SPACING.sm,
-    letterSpacing: 2,
+  logo: {
+    width: 200,
+    height: 100,
+    marginBottom: 2,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: COLORS.textSecondary,
-    marginBottom: SPACING.lg * 2,
+    marginBottom: SPACING.lg,
     letterSpacing: 2,
   },
 
