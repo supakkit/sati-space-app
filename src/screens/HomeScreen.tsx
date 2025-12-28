@@ -196,7 +196,7 @@ export default function HomeScreen() {
 
       <ScrollView contentContainerStyle={styles.content}>
         <Image
-          source={require("../../assets/images/icon.png")}
+          source={require("../../assets/images/logo.png")}
           alt="logo"
           style={styles.logo}
         />
