@@ -8,7 +8,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest",
-    "test:debug": "jest --runInBand --verbose --no-cache --detectOpenHandles"
+    "test:debug": "jest --runInBand --verbose --no-cache --detectOpenHandles",
+    "eas:apk": "eas build -p android --profile preview",
+    "eas:aab": "eas build --platform android"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
