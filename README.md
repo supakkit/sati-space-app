@@ -31,7 +31,7 @@ Unlike typical meditation apps that play continuous audio, **Sati Space** emphas
 ## 📦 Try the App (Android)
 
 👉 **Download APK:**
-[Download APK (v1.1.0)](https://github.com/supakkit/sati-space-app/releases/download/v1.1.0/application-9dba127d-7f66-4ceb-9848-12aaf9c295c8.apk)
+[Download APK (v1.1.0)](https://github.com/supakkit/sati-space-app/releases/download/v1.1.0/application-d7695d50-5013-460c-8a67-6f5c219b5102.apk)
 
 > ℹ️ You may need to enable **“Install unknown apps”** on your Android device.
 
