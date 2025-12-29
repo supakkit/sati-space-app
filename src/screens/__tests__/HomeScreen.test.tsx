@@ -49,10 +49,10 @@ beforeEach(() => {
 });
 
 it("renders app title and stats", async () => {
-  const { getByText } = render(<HomeScreen />);
+  const { getByText, getByTestId } = render(<HomeScreen />);
 
   await waitFor(() => {
-    expect(getByText("Sati Space")).toBeTruthy();
+    expect(getByTestId("logo")).toBeTruthy();
     expect(getByText("3")).toBeTruthy();
     expect(getByText("45")).toBeTruthy();
   });

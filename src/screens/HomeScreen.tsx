@@ -201,6 +201,7 @@ export default function HomeScreen() {
         <Image
           source={require("../../assets/images/logo.png")}
           alt="logo"
+          testID="logo"
           style={styles.logo}
         />
         <Text style={styles.subtitle}>Find your inner peace</Text>
