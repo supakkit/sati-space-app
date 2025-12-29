@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { COLORS, SPACING } from "../constants/theme";
@@ -60,6 +61,8 @@ export default function HomeScreen() {
     totalSessions: 0,
     totalMinutes: 0,
   });
+
+  const { width, height } = useWindowDimensions();
 
   useEffect(() => {
     loadPresets();
@@ -197,7 +200,10 @@ export default function HomeScreen() {
         onClose={() => setShowSavePreset(false)}
       />
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
         <Image
           source={require("../../assets/images/logo.png")}
           alt="logo"
@@ -210,6 +216,15 @@ export default function HomeScreen() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => setShowHistory(true)}
+          style={
+            width > height
+              ? {
+                  position: "absolute",
+                  left: 40,
+                  top: 20,
+                }
+              : null
+          }
         >
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
@@ -264,8 +279,21 @@ export default function HomeScreen() {
         </View>
 
         {/* Duration Selector */}
-        <View style={globalStyles.section}>
-          <Text style={globalStyles.sectionTitle}>Duration</Text>
+        <View
+          style={
+            width > height
+              ? { flexDirection: "row", marginBottom: SPACING.lg * scale }
+              : globalStyles.section
+          }
+        >
+          <Text
+            style={[
+              globalStyles.sectionTitle,
+              width > height ? globalStyles.chip : null,
+            ]}
+          >
+            Duration
+          </Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -294,20 +322,29 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
 
-        {/* Sound Selector */}
-        <View style={globalStyles.section}>
-          <Text style={globalStyles.sectionTitle}>Ambient Sound</Text>
-          <TouchableOpacity
-            style={globalStyles.selectBox}
-            activeOpacity={0.8}
-            onPress={() => setShowSoundPicker(true)}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 12 * scale,
-              }}
+        <View
+          style={[
+            {
+              gap: SPACING.lg * scale,
+              marginBottom: SPACING.xl * scale,
+            },
+            width > height
+              ? {
+                  flexDirection: "row",
+                  width: "100%",
+                  justifyContent: "space-evenly",
+                  marginBottom: SPACING.lg * scale,
+                }
+              : null,
+          ]}
+        >
+          {/* Sound Selector */}
+          <View>
+            <Text style={globalStyles.sectionTitle}>Ambient Sound</Text>
+            <TouchableOpacity
+              style={globalStyles.selectBox}
+              activeOpacity={0.8}
+              onPress={() => setShowSoundPicker(true)}
             >
               <View
                 style={[
@@ -344,50 +381,50 @@ export default function HomeScreen() {
                 size={20 * scale}
                 color={COLORS.textSecondary}
               />
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        {/* Music Timing Config */}
-        <View style={globalStyles.section}>
-          <Text style={globalStyles.sectionTitle}>Music Flow Config</Text>
-          <View style={globalStyles.row}>
-            {/* Start / Warmup Config */}
-            <TouchableOpacity
-              style={styles.infoBox}
-              onPress={handleSetWarmupDuration}
-            >
-              <Text style={styles.infoLabel}>Start (tap)</Text>
-              <Text style={styles.infoValue}>
-                {Math.floor(warmupDuration / 60)}m
-              </Text>
             </TouchableOpacity>
+          </View>
 
-            <View style={styles.lineSpacer} />
+          {/* Music Timing Config */}
+          <View>
+            <Text style={globalStyles.sectionTitle}>Music Flow Config</Text>
+            <View style={globalStyles.row}>
+              {/* Start / Warmup Config */}
+              <TouchableOpacity
+                style={styles.infoBox}
+                onPress={handleSetWarmupDuration}
+              >
+                <Text style={styles.infoLabel}>Start (tap)</Text>
+                <Text style={styles.infoValue}>
+                  {Math.floor(warmupDuration / 60)}m
+                </Text>
+              </TouchableOpacity>
 
-            {/* Middle */}
-            <View style={styles.infoBox}>
-              <Text style={styles.infoLabel}>Deep Silence</Text>
-              <Text style={styles.infoValue}>
-                {Math.floor(
-                  (totalDuration - warmupDuration - cooldownDuration) / 60
-                )}
-                m
-              </Text>
+              <View style={styles.lineSpacer} />
+
+              {/* Middle */}
+              <View style={styles.infoBox}>
+                <Text style={styles.infoLabel}>Deep Silence</Text>
+                <Text style={styles.infoValue}>
+                  {Math.floor(
+                    (totalDuration - warmupDuration - cooldownDuration) / 60
+                  )}
+                  m
+                </Text>
+              </View>
+
+              <View style={styles.lineSpacer} />
+
+              {/* End / Cooldown Config */}
+              <TouchableOpacity
+                style={styles.infoBox}
+                onPress={handleSetCooldownDuration}
+              >
+                <Text style={styles.infoLabel}>End (tap)</Text>
+                <Text style={styles.infoValue}>
+                  {Math.floor(cooldownDuration / 60)}m
+                </Text>
+              </TouchableOpacity>
             </View>
-
-            <View style={styles.lineSpacer} />
-
-            {/* End / Cooldown Config */}
-            <TouchableOpacity
-              style={styles.infoBox}
-              onPress={handleSetCooldownDuration}
-            >
-              <Text style={styles.infoLabel}>End (tap)</Text>
-              <Text style={styles.infoValue}>
-                {Math.floor(cooldownDuration / 60)}m
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
 
