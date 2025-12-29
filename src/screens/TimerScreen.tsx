@@ -15,6 +15,8 @@ import { useMeditationAudio } from "../hooks/useMeditationAudio";
 import { Ionicons } from "@expo/vector-icons";
 import { saveSession } from "../utils/storage";
 import { useResponsiveScale } from "../utils/responsive";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
+import { useEffect } from "react";
 
 const { scale } = useResponsiveScale();
 
@@ -84,6 +86,18 @@ export default function TimerScreen({
   });
 
   const { width, height } = useWindowDimensions();
+
+  useEffect(() => {
+    if (isRunning) {
+      activateKeepAwakeAsync();
+    } else {
+      deactivateKeepAwake();
+    }
+
+    return () => {
+      deactivateKeepAwake();
+    };
+  }, [isRunning]);
 
   return (
     <View style={globalStyles.container}>
