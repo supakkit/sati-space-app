@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "sati-space-app",
-    "slug": "sati-space-app",
+    "name": "Sati Space",
+    "slug": "sati-space",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
